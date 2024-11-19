@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue"
-import { GameData, GameInstallStatus } from "../models"
+import { GameData, GameInstallStatus } from "../common/models.ts"
+import Genres from "../components/Genres.vue"
 
 type View = "grid" | "table" | "list"
 const games = ref<GameData[]>([
@@ -40,12 +41,7 @@ const view = ref<View>("list")
                     <td>{{ game.name }}</td>
                     <td>{{ game.description }}</td>
                     <td class="flex gap-2">
-                        <div
-                            v-for="genre in game.genres"
-                            class="badge badge-neutral"
-                        >
-                            {{ genre }}
-                        </div>
+                        <Genres :genres="game.genres" />
                     </td>
                 </tr>
             </tbody>
