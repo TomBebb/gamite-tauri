@@ -23,7 +23,47 @@ const games = ref<GameData[]>([
         installStatus: GameInstallStatus.Installed,
     },
     {
-        name: "Atelier Shallie 1",
+        name: "Atelier Shallie 33",
+        libraryId: "1621310",
+        libraryType: "steam",
+        description: "Play as sophie 1",
+        genres: ["JRPG", "Turn-Based", "TODo"],
+        installStatus: GameInstallStatus.Installed,
+    },
+    {
+        name: "Demo",
+        libraryId: "1621310",
+        libraryType: "steam",
+        description: "Play as sophie 1",
+        genres: ["JRPG", "Turn-Based", "TODo"],
+        installStatus: GameInstallStatus.Installed,
+    },
+    {
+        name: "Demo",
+        libraryId: "1621310",
+        libraryType: "steam",
+        description: "Play as sophie 1",
+        genres: ["JRPG", "Turn-Based", "TODo"],
+        installStatus: GameInstallStatus.Installed,
+    },
+    {
+        name: "Demo",
+        libraryId: "1621310",
+        libraryType: "steam",
+        description: "Play as sophie 1",
+        genres: ["JRPG", "Turn-Based", "TODo"],
+        installStatus: GameInstallStatus.Installed,
+    },
+    {
+        name: "Demo",
+        libraryId: "1621310",
+        libraryType: "steam",
+        description: "Play as sophie 1",
+        genres: ["JRPG", "Turn-Based", "TODo"],
+        installStatus: GameInstallStatus.Installed,
+    },
+    {
+        name: "Demo",
         libraryId: "1621310",
         libraryType: "steam",
         description: "Play as sophie 1",
@@ -49,16 +89,37 @@ function verticalMovementHandler(btn: MappedButton) {
             break
     }
 }
+function gridMovementHandler(btn: MappedButton) {
+    switch (btn) {
+        case MappedButton.Up:
+            if (selectedGameIndex.value - columns > 0)
+                selectedGameIndex.value -= columns
+            break
+        case MappedButton.Down:
+            if (selectedGameIndex.value + columns < games.value.length)
+                selectedGameIndex.value += columns
+            break
+        case MappedButton.Left:
+            if (selectedGameIndex.value > 0) selectedGameIndex.value--
+            break
+        case MappedButton.Right:
+            if (selectedGameIndex.value + 1 < games.value.length)
+                selectedGameIndex.value++
+            break
+    }
+}
 function onViewChange(view: View) {
     inputEmitter.off("pressed", verticalMovementHandler)
+    inputEmitter.off("pressed", gridMovementHandler)
     if (view === "grid") {
-        // TODO
+        inputEmitter.on("pressed", gridMovementHandler)
     } else {
         inputEmitter.on("pressed", verticalMovementHandler)
     }
 }
 onViewChange(view.value)
 watch(view, onViewChange)
+const columns = 5
 </script>
 <template>
     <select class="select" v-model="view">
@@ -66,7 +127,23 @@ watch(view, onViewChange)
             {{ view.name }}
         </option>
     </select>
-    <template v-if="view === 'table'">
+    <div
+        v-if="view === 'grid'"
+        class="grid gap-2"
+        :class="`grid-cols-${columns}`"
+    >
+        <div
+            v-for="(game, index) in games"
+            class="flex flex-col items-center rounded-sm border-[1px]"
+            :class="{
+                'bg-primary-content text-primary': index === selectedGameIndex,
+            }"
+        >
+            <div>{{ game.name }}</div>
+        </div>
+    </div>
+
+    <template v-else-if="view === 'table'">
         <table class="table select-none">
             <thead>
                 <tr>
