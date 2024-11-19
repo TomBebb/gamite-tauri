@@ -54,3 +54,67 @@ window.addEventListener("keyup", (event: KeyboardEvent) => {
     const mapped = mapKey(event)
     if (mapped) inputEmitter.emit("released", mapped)
 })
+
+const gamepads: Gamepad[] = []
+window.addEventListener("gamepadconnected", (event: GamepadEvent) => {
+    console.info("gamepadconnected", event)
+    gamepads.push(event.gamepad)
+})
+
+window.addEventListener("gamepaddisconnected", (event: GamepadEvent) => {
+    console.info("gamepaddisconnected", event)
+    gamepads.splice(gamepads.indexOf(event.gamepad), 1)
+})
+interface IndexedMappedButton {
+    index: number
+    mapped: MappedButton
+}
+const gpButtonIndices: IndexedMappedButton[] = [
+    {
+        index: 0,
+        mapped: MappedButton.Confirm,
+    },
+    {
+        index: 12,
+        mapped: MappedButton.Up,
+    },
+    {
+        index: 13,
+        mapped: MappedButton.Down,
+    },
+    {
+        index: 14,
+        mapped: MappedButton.Left,
+    },
+    {
+        index: 15,
+        mapped: MappedButton.Right,
+    },
+]
+const deadzone = 0.1
+setInterval(() => {
+    if (gamepads.length === 0) return
+    const pressed = new Set<MappedButton>()
+    for (const gamepad of navigator.getGamepads()) {
+        if (!gamepad?.connected) continue
+        for (const entry of gpButtonIndices) {
+            if (gamepad.buttons[entry.index].pressed) pressed.add(entry.mapped)
+        }
+
+        const x = gamepad.axes[0]
+        const y = gamepad.axes[1]
+        if (Math.abs(x) > deadzone) {
+            pressed.add(x > 0 ? MappedButton.Right : MappedButton.Left)
+        }
+        if (Math.abs(y) > deadzone) {
+            pressed.add(y > 0 ? MappedButton.Down : MappedButton.Up)
+        }
+    }
+    for (const currBtn of currButtons.value) {
+        if (!pressed.has(currBtn)) inputEmitter.emit("released", currBtn)
+    }
+    for (const pressedBtn of pressed) {
+        if (!currButtons.value.has(pressedBtn))
+            inputEmitter.emit("pressed", pressedBtn)
+    }
+}, 1000 / 100)
