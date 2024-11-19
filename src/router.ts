@@ -4,14 +4,16 @@ import {
     RouteRecordSingleView,
 } from "vue-router"
 
-import LibraryView from "./views/LibraryView.vue"
-import SettingsView from "./views/SettingsView.vue"
-
 export const routes: (RouteRecordSingleView & { icon: string })[] = [
-    { path: "/", component: LibraryView, name: "Library", icon: "mdi:books" },
+    {
+        path: "/",
+        component: () => import("./views/LibraryView.vue"),
+        name: "Library",
+        icon: "mdi:books",
+    },
     {
         path: "/settings",
-        component: SettingsView,
+        component: () => import("./views/SettingsView.vue"),
         name: "Settings",
         icon: "mdi:cog",
     },
