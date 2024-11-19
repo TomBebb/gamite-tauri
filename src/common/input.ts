@@ -1,6 +1,7 @@
 import mitt, { Emitter } from "mitt"
 import { produce } from "immer"
-import { ref } from "vue"
+import { ref, watch } from "vue"
+import { isBigScreen } from "./bigScreen.ts"
 export const enum MappedButton {
     Down = "down",
     Up = "up",
@@ -43,18 +44,16 @@ function mapKey(event: KeyboardEvent): null | MappedButton {
             return null
     }
 }
-
-window.addEventListener("keydown", (event: KeyboardEvent) => {
-    console.info("down", event.key)
+function onKeyDown(event: KeyboardEvent) {
     const mapped = mapKey(event)
+    console.debug("keyUp", { mapped, raw: event.key })
     if (mapped) inputEmitter.emit("pressed", mapped)
-})
-
-window.addEventListener("keyup", (event: KeyboardEvent) => {
+}
+function onKeyUp(event: KeyboardEvent) {
     const mapped = mapKey(event)
+    console.debug("keyUp", { mapped, raw: event.key })
     if (mapped) inputEmitter.emit("released", mapped)
-})
-
+}
 const gamepads: Gamepad[] = []
 window.addEventListener("gamepadconnected", (event: GamepadEvent) => {
     console.info("gamepadconnected", event)
@@ -92,29 +91,46 @@ const gpButtonIndices: IndexedMappedButton[] = [
     },
 ]
 const deadzone = 0.1
-setInterval(() => {
-    if (gamepads.length === 0) return
-    const pressed = new Set<MappedButton>()
-    for (const gamepad of navigator.getGamepads()) {
-        if (!gamepad?.connected) continue
-        for (const entry of gpButtonIndices) {
-            if (gamepad.buttons[entry.index].pressed) pressed.add(entry.mapped)
-        }
+function setGamepadInterval(): number {
+    console.debug("setGamepadInterval", { gamepadInterval })
+    return setInterval(() => {
+        if (gamepads.length === 0) return
+        const pressed = new Set<MappedButton>()
+        for (const gamepad of navigator.getGamepads()) {
+            if (!gamepad?.connected) continue
+            for (const entry of gpButtonIndices) {
+                if (gamepad.buttons[entry.index].pressed)
+                    pressed.add(entry.mapped)
+            }
 
-        const x = gamepad.axes[0]
-        const y = gamepad.axes[1]
-        if (Math.abs(x) > deadzone) {
-            pressed.add(x > 0 ? MappedButton.Right : MappedButton.Left)
+            const x = gamepad.axes[0]
+            const y = gamepad.axes[1]
+            if (Math.abs(x) > deadzone) {
+                pressed.add(x > 0 ? MappedButton.Right : MappedButton.Left)
+            }
+            if (Math.abs(y) > deadzone) {
+                pressed.add(y > 0 ? MappedButton.Down : MappedButton.Up)
+            }
         }
-        if (Math.abs(y) > deadzone) {
-            pressed.add(y > 0 ? MappedButton.Down : MappedButton.Up)
+        for (const currBtn of currButtons.value) {
+            if (!pressed.has(currBtn)) inputEmitter.emit("released", currBtn)
         }
+        for (const pressedBtn of pressed) {
+            if (!currButtons.value.has(pressedBtn))
+                inputEmitter.emit("pressed", pressedBtn)
+        }
+    }, 1000 / 100)
+}
+let gamepadInterval: number
+watch(isBigScreen, (bs) => {
+    console.debug("isBigScreen", bs)
+    if (bs) {
+        gamepadInterval = setGamepadInterval()
+        window.addEventListener("keydown", onKeyDown)
+        window.addEventListener("keyup", onKeyUp)
+    } else {
+        clearInterval(gamepadInterval)
+        window.removeEventListener("keydown", onKeyDown)
+        window.removeEventListener("keyup", onKeyUp)
     }
-    for (const currBtn of currButtons.value) {
-        if (!pressed.has(currBtn)) inputEmitter.emit("released", currBtn)
-    }
-    for (const pressedBtn of pressed) {
-        if (!currButtons.value.has(pressedBtn))
-            inputEmitter.emit("pressed", pressedBtn)
-    }
-}, 1000 / 100)
+})

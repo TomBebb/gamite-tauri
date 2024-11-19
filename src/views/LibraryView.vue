@@ -76,7 +76,7 @@ const views: { name: string; value: View }[] = [
     { name: "Table View", value: "table" },
     { name: "List View", value: "list" },
 ]
-const view = ref<View>("list")
+const view = ref<View>("table")
 const selectedGameIndex = ref<number>(0)
 function verticalMovementHandler(btn: MappedButton) {
     switch (btn) {
@@ -90,6 +90,7 @@ function verticalMovementHandler(btn: MappedButton) {
     }
 }
 function gridMovementHandler(btn: MappedButton) {
+    console.info("gridMovementHandler", btn)
     switch (btn) {
         case MappedButton.Up:
             if (selectedGameIndex.value - columns > 0)
