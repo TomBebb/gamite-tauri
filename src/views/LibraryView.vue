@@ -135,7 +135,8 @@ const columns = 5
     >
         <div
             v-for="(game, index) in games"
-            class="flex flex-col items-center rounded-sm border-[1px]"
+            class="flex cursor-pointer flex-col items-center rounded-sm border-[1px]"
+            @click="selectedGameIndex = index"
             :class="{
                 'bg-primary-content text-primary': index === selectedGameIndex,
             }"
@@ -156,10 +157,12 @@ const columns = 5
             <tbody>
                 <tr
                     v-for="(game, index) in games"
+                    class="cursor-pointer"
                     :class="{
                         'bg-primary-content text-primary':
                             index === selectedGameIndex,
                     }"
+                    @click="selectedGameIndex = index"
                 >
                     <td>{{ game.name }}</td>
                     <td>{{ game.description }}</td>
