@@ -12,6 +12,7 @@ async function greet() {
 </script>
 
 <template>
+    <button class="btn" @click="greet">Greet</button>
     <NavMenu />
     <main>
         <RouterView />
