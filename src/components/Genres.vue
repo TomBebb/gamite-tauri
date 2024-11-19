@@ -10,7 +10,6 @@ const mappedGenres = computed(() =>
         colorIndex: getGenreIndex(genre),
     }))
 )
-console.log(mappedGenres.value)
 </script>
 
 <template>

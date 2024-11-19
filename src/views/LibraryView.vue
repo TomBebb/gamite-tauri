@@ -122,7 +122,7 @@ watch(view, onViewChange)
 const columns = 5
 </script>
 <template>
-    <select class="select" v-model="view">
+    <select class="show-on-desktop select" v-model="view">
         <option v-for="view in views" :value="view.value">
             {{ view.name }}
         </option>
