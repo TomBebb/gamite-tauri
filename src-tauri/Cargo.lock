@@ -1483,6 +1483,7 @@ dependencies = [
  "gamite-core",
  "serde",
  "serde_json",
+ "sql_query_builder",
  "tauri",
  "tauri-build",
  "tauri-plugin-gamepad",
@@ -4297,6 +4298,12 @@ name = "spin"
 version = "0.9.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6980e8d7511241f8acf4aebddbb1ff938df5eebe98691418c4468d0b72a96a67"
+
+[[package]]
+name = "sql_query_builder"
+version = "2.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "635f6bb07a64bf4a9a55251b965fd3c7998ecb56f2aaa59f3a6abca6f3f07974"
 
 [[package]]
 name = "stable-eyre"
