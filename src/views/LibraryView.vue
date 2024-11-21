@@ -1,76 +1,20 @@
 <script setup lang="ts">
-import { ref, watch } from "vue"
+import { onMounted, ref, watch } from "vue"
 import { inputEmitter, MappedButton } from "../common/input.ts"
-import { GameData, GameInstallStatus } from "../common/models.ts"
+import { GameData } from "../common/models.ts"
 import Genres from "../components/Genres.vue"
+import { invoke } from "@tauri-apps/api/core"
 
+onMounted(() => {
+    invoke<GameData[]>("get_games")
+        .then((gs) => {
+            console.info("got games", gs)
+            games.value = gs
+        })
+        .catch(console.error)
+})
 type View = "grid" | "table" | "list"
-const games = ref<GameData[]>([
-    {
-        name: "Atelier Sophie 2",
-        libraryId: "1621310",
-        libraryType: "steam",
-        description: "Play as sophie 2",
-        genres: ["JRPG", "Turn-Based"],
-        installStatus: GameInstallStatus.Installed,
-    },
-    {
-        name: "Atelier Sophie 1",
-        libraryId: "1621310",
-        libraryType: "steam",
-        description: "Play as sophie 1",
-        genres: ["JRPG", "Turn-Based", "TODo"],
-        installStatus: GameInstallStatus.Installed,
-    },
-    {
-        name: "Atelier Shallie 33",
-        libraryId: "1621310",
-        libraryType: "steam",
-        description: "Play as sophie 1",
-        genres: ["JRPG", "Turn-Based", "TODo"],
-        installStatus: GameInstallStatus.Installed,
-    },
-    {
-        name: "Demo",
-        libraryId: "1621310",
-        libraryType: "steam",
-        description: "Play as sophie 1",
-        genres: ["JRPG", "Turn-Based", "TODo"],
-        installStatus: GameInstallStatus.Installed,
-    },
-    {
-        name: "Demo",
-        libraryId: "1621310",
-        libraryType: "steam",
-        description: "Play as sophie 1",
-        genres: ["JRPG", "Turn-Based", "TODo"],
-        installStatus: GameInstallStatus.Installed,
-    },
-    {
-        name: "Demo",
-        libraryId: "1621310",
-        libraryType: "steam",
-        description: "Play as sophie 1",
-        genres: ["JRPG", "Turn-Based", "TODo"],
-        installStatus: GameInstallStatus.Installed,
-    },
-    {
-        name: "Demo",
-        libraryId: "1621310",
-        libraryType: "steam",
-        description: "Play as sophie 1",
-        genres: ["JRPG", "Turn-Based", "TODo"],
-        installStatus: GameInstallStatus.Installed,
-    },
-    {
-        name: "Demo",
-        libraryId: "1621310",
-        libraryType: "steam",
-        description: "Play as sophie 1",
-        genres: ["JRPG", "Turn-Based", "TODo"],
-        installStatus: GameInstallStatus.Installed,
-    },
-])
+const games = ref<GameData[]>([])
 const views: { name: string; value: View }[] = [
     { name: "Grid View", value: "grid" },
     { name: "Table View", value: "table" },

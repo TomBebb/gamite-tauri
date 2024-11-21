@@ -1,5 +1,4 @@
 use std::collections::BTreeMap;
-use std::fmt;
 
 #[derive(Debug, Clone, Eq, PartialEq)]
 pub enum KvToken {

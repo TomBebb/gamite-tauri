@@ -37,7 +37,6 @@ async fn run_cmd(cmd: &str, id: &str) {
     debug!("steam cmd: {}", raw);
     open::that_in_background(&raw);
 }
-
 fn from_epoch(secs: u64) -> SystemTime {
     UNIX_EPOCH + Duration::from_secs(secs)
 }

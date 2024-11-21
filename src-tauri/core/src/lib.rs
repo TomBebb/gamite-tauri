@@ -13,8 +13,6 @@ pub const BASE_DATA_DIR: LazyCell<PathBuf> = LazyCell::new(|| {
         .join("gamite")
 });
 
-pub const DB_FILE: LazyCell<PathBuf> = LazyCell::new(|| BASE_DATA_DIR.join("gamite.db"));
-
 pub trait BaseAddon {
     const TYPE: &'static str;
 }
