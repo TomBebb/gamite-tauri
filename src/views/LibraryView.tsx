@@ -76,9 +76,11 @@ export default function () {
         <>
             <select
                 class="show-on-desktop select"
-                on:select={(ev) =>
-                    setView((ev.target as HTMLInputElement).value as View)
-                }
+                on:change={(ev) => {
+                    setView(
+                        (ev.target as unknown as HTMLInputElement).value as View
+                    )
+                }}
             >
                 <For each={views}>
                     {(view) => <option value={view.value}>{view.name}</option>}
