@@ -1,7 +1,8 @@
 import mitt, { Emitter } from "mitt"
 import { produce } from "immer"
-import { ref, watch } from "vue"
-import { isBigScreen } from "./bigScreen.ts"
+import { isBigScreen } from "./bigScreen"
+import { createEffect, createSignal } from "solid-js"
+
 export const enum MappedButton {
     Down = "down",
     Up = "up",
@@ -14,19 +15,19 @@ export type InputEvents = {
     released: MappedButton
 }
 export const inputEmitter: Emitter<InputEvents> = mitt<InputEvents>()
-export const currButtons = ref<Set<MappedButton>>(new Set())
-
-inputEmitter.on(
-    "pressed",
-    (btn) =>
-        (currButtons.value = produce(currButtons.value, (st) => st.add(btn)))
+export const [currButtons, setCurrButtons] = createSignal<Set<MappedButton>>(
+    new Set()
 )
-inputEmitter.on(
-    "released",
-    (btn) =>
-        (currButtons.value = produce(currButtons.value, (st) => {
+
+inputEmitter.on("pressed", (btn) =>
+    setCurrButtons(produce(currButtons(), (st) => st.add(btn)))
+)
+inputEmitter.on("released", (btn) =>
+    setCurrButtons(
+        produce(currButtons(), (st) => {
             st.delete(btn)
-        }))
+        })
+    )
 )
 function mapKey(event: KeyboardEvent): null | MappedButton {
     switch (event.key) {
@@ -112,17 +113,19 @@ function setGamepadInterval(): number {
                 pressed.add(y > 0 ? MappedButton.Down : MappedButton.Up)
             }
         }
-        for (const currBtn of currButtons.value) {
+        for (const currBtn of currButtons()) {
             if (!pressed.has(currBtn)) inputEmitter.emit("released", currBtn)
         }
         for (const pressedBtn of pressed) {
-            if (!currButtons.value.has(pressedBtn))
+            if (!currButtons().has(pressedBtn))
                 inputEmitter.emit("pressed", pressedBtn)
         }
     }, 1000 / 100)
 }
 let gamepadInterval: number
-watch(isBigScreen, (bs) => {
+
+createEffect(() => {
+    const bs = isBigScreen()
     console.debug("isBigScreen", bs)
     if (bs) {
         gamepadInterval = setGamepadInterval()

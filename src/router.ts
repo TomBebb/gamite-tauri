@@ -1,25 +1,17 @@
-import {
-    createMemoryHistory,
-    createRouter,
-    RouteRecordSingleView,
-} from "vue-router"
+import { RouteDefinition } from "@solidjs/router"
+import { lazy } from "solid-js"
 
-export const routes: (RouteRecordSingleView & { icon: string })[] = [
+export const routes: (RouteDefinition & { name: string; icon: string })[] = [
     {
         path: "/",
-        component: () => import("./views/LibraryView.vue"),
+        component: lazy(() => import("./views/LibraryView.js")),
         name: "Library",
         icon: "mdi:books",
     },
     {
         path: "/settings",
-        component: () => import("./views/SettingsView.vue"),
+        component: lazy(() => import("./views/SettingsView.js")),
         name: "Settings",
         icon: "mdi:cog",
     },
 ]
-
-export const router = createRouter({
-    history: createMemoryHistory(),
-    routes,
-})

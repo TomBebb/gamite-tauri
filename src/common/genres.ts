@@ -1,17 +1,15 @@
-import { ref } from "vue"
-
 const totalBadgeVariants = 6
-export const genreIndexes = ref<Record<string, number>>({})
+export let genreIndexes: Record<string, number> = {}
 export function getGenreIndex(name: string): number {
-    const val = genreIndexes.value[name]
+    const val = genreIndexes[name]
     if (val != null) return val
     console.debug("add genreIndex", {
         val,
         name,
-        indexes: genreIndexes.value,
-        total: genreIndexes.value.length,
+        indexes: genreIndexes,
+        total: genreIndexes.length,
     })
-    const ind = Object.keys(genreIndexes.value).length % totalBadgeVariants
-    genreIndexes.value = { ...genreIndexes.value, [name]: ind }
+    const ind = Object.keys(genreIndexes).length % totalBadgeVariants
+    genreIndexes = { ...genreIndexes, [name]: ind }
     return ind
 }
