@@ -4,7 +4,10 @@ import "./common/bigScreen.ts"
 import { render } from "solid-js/web"
 import { Router } from "@solidjs/router"
 import App from "./App"
+import { window } from "@tauri-apps/api"
 
+const w = window.getCurrentWindow()
+await w.setDecorations(false)
 const root = document.getElementById("app")!
 
 if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
@@ -18,8 +21,8 @@ enableMapSet()
 render(
     () => (
         <>
-            <Router>{routes}</Router>
             <App />
+            <Router>{routes}</Router>
         </>
     ),
     root
