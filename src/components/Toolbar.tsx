@@ -6,16 +6,14 @@ export default function () {
     const main = window.getCurrentWindow()
     const [maximized, setMaximized] = createSignal(false)
 
+    function toggleMaximize() {
+        main.toggleMaximize()
+            .then((_) => setMaximized(!maximized()))
+            .catch(console.error)
+    }
+
     return (
-        <div
-            class="flex flex-row gap-2"
-            onDblClick={() =>
-                main
-                    .toggleMaximize()
-                    .then((_) => setMaximized(!maximized()))
-                    .catch(console.error)
-            }
-        >
+        <div class="flex flex-row gap-2" onDblClick={toggleMaximize}>
             <div
                 class="flex-1"
                 onMouseDown={(ev) => {
@@ -24,15 +22,7 @@ export default function () {
                     }
                 }}
             />
-            <button
-                class="btn btn-accent btn-sm"
-                on:click={() =>
-                    main
-                        .toggleMaximize()
-                        .then((_) => setMaximized(!maximized()))
-                        .catch(console.error)
-                }
-            >
+            <button class="btn btn-accent btn-sm" on:click={toggleMaximize}>
                 <Icon
                     icon={
                         "mdi:window-" + (maximized() ? "restore" : "maximize")
