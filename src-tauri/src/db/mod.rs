@@ -1,6 +1,7 @@
 mod game;
 mod game_genres;
 mod genre;
+mod ops;
 
 pub use game::Game;
 use gamite_core::BASE_DATA_DIR;
@@ -27,6 +28,8 @@ pub async fn init() {
     fs::create_dir_all(&*BASE_DATA_DIR).await.unwrap();
     let conn = connect().await;
 
-    conn.execute_unprepared(include_str!("init.sql")).await.unwrap();
+    conn.execute_unprepared(include_str!("init.sql"))
+        .await
+        .unwrap();
     log::info!("initialized game database");
 }

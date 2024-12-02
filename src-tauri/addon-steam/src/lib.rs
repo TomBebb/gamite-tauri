@@ -4,16 +4,14 @@ use crate::kv::ast::KvValue;
 use crate::kv::parser::full_parse;
 use async_stream::stream;
 use gamite_core::GameInstallStatus::Queued;
-use gamite_core::{
-    BaseAddon, GameInstallStatus, GameLibrary, GameLibraryRef, ScannedGameLibraryMetadata,
-};
+use gamite_core::{register_plugin, BaseAddon, BoxFuture, BoxStream, GameLibrary, PluginRegistrar};
+use gamite_core::{GameInstallStatus, GameLibraryRef, ScannedGameLibraryMetadata};
 use log::*;
 use once_cell::sync::Lazy;
 use std::env;
 use std::path::PathBuf;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use tokio::fs;
-use tokio_stream::Stream;
 
 pub struct SteamLibrary;
 
@@ -32,22 +30,33 @@ const BASE_PATH: Lazy<PathBuf> = Lazy::new(|| {
     }
 });
 const APPS_PATH: Lazy<PathBuf> = Lazy::new(|| BASE_PATH.join("steamapps"));
-async fn run_cmd(cmd: &str, id: &str) {
+fn run_cmd(cmd: &'static str, id: &str) {
     let raw = format!("steam://{}//{}", cmd, id);
     debug!("steam cmd: {}", raw);
     open::that_in_background(&raw);
 }
+fn run_cmd_ref(cmd: &'static str, my_ref: GameLibraryRef) {
+    run_cmd(cmd, &my_ref.library_id)
+}
+fn wrapped_run_cmd(cmd: &'static str, game: &GameLibraryRef) -> BoxFuture<'static> {
+    let game_c = game.clone();
+    Box::pin(async move {
+        run_cmd_ref(cmd, game_c);
+    })
+}
 fn from_epoch(secs: u64) -> SystemTime {
     UNIX_EPOCH + Duration::from_secs(secs)
 }
-
+const ID: &str = "steam";
 impl BaseAddon for SteamLibrary {
-    const TYPE: &'static str = "steam";
+    fn get_id(&self) -> &'static str {
+        ID
+    }
 }
 impl GameLibrary for SteamLibrary {
-    fn scan() -> impl Stream<Item = ScannedGameLibraryMetadata> {
+    fn scan(&self) -> BoxStream<'static, ScannedGameLibraryMetadata> {
         debug!("APPS_PATH: {:?}", &*APPS_PATH);
-        stream! {
+        Box::pin(stream! {
             let mut reader = fs::read_dir(APPS_PATH.as_path()).await.unwrap();
             while let Some(entry) = reader.next_entry().await.unwrap() {
                 let path: PathBuf = entry.path();
@@ -94,7 +103,7 @@ impl GameLibrary for SteamLibrary {
                     library_id: get_obj_text("appid").into(),
                     name: get_obj_text("name").into(),
                     last_played: get_obj_unix_opt("LastPlayed"),
-                    library_type: Self::TYPE.into(),
+                    library_type: ID.into(),
                     install_status: if bytes_dl == None {
                         Queued
                     } else if bytes_dl == bytes_to_dl {
@@ -105,18 +114,25 @@ impl GameLibrary for SteamLibrary {
                     ..Default::default()
                 }
             }
-        }
+        })
     }
-    async fn launch(game: &GameLibraryRef) {
-        run_cmd("rungameid", &game.library_id).await
+    fn launch(&self, game: &GameLibraryRef) -> BoxFuture<'static> {
+        wrapped_run_cmd("launch", game)
     }
-    async fn install(game: &GameLibraryRef) {
-        run_cmd("install", &game.library_id).await
+    fn install(&self, game: &GameLibraryRef) -> BoxFuture<'static> {
+        wrapped_run_cmd("install", game)
     }
-    async fn uninstall(game: &GameLibraryRef) {
-        run_cmd("uninstall", &game.library_id).await
+    fn uninstall(&self, game: &GameLibraryRef) -> BoxFuture<'static> {
+        wrapped_run_cmd("uninstall", game)
     }
-    async fn check_install_status(game: &GameLibraryRef) -> GameInstallStatus {
-        todo!()
+    fn check_install_status(&self, game: &GameLibraryRef) -> BoxFuture<'static, GameInstallStatus> {
+        Box::pin(async { GameInstallStatus::Installing })
     }
+}
+// random/src/lib.rs
+
+register_plugin!(register);
+
+extern "C" fn register(registrar: &mut dyn PluginRegistrar) {
+    registrar.register_library("steam", Box::new(SteamLibrary {}));
 }

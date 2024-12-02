@@ -1,9 +1,13 @@
 use std::cell::LazyCell;
 use std::future::Future;
 use std::path::PathBuf;
+use std::pin::Pin;
 use tokio_stream::Stream;
 
 mod models;
+mod plugin;
+
+pub use plugin::*;
 
 pub use models::*;
 
@@ -12,14 +16,18 @@ pub const BASE_DATA_DIR: LazyCell<PathBuf> = LazyCell::new(|| {
         .expect("No data directory set!")
         .join("gamite")
 });
+pub type BoxFuture<'a, T = ()> = Pin<Box<dyn Future<Output = T> + Send + 'a>>;
 
-pub trait BaseAddon {
-    const TYPE: &'static str;
-}
-pub trait GameLibrary: BaseAddon {
-    fn launch(game: &GameLibraryRef) -> impl Future;
-    fn scan() -> impl Stream<Item = ScannedGameLibraryMetadata>;
-    fn install(game: &GameLibraryRef) -> impl Future;
-    fn uninstall(game: &GameLibraryRef) -> impl Future;
-    fn check_install_status(game: &GameLibraryRef) -> impl Future<Output = GameInstallStatus>;
+pub type BoxStream<'a, T> = Pin<Box<dyn Stream<Item = T> + Send + 'a>>;
+#[macro_export]
+macro_rules! register_plugin {
+    ($register:expr) => {
+        #[doc(hidden)]
+        #[no_mangle]
+        pub static plugin_declaration: $crate::PluginDeclaration = $crate::PluginDeclaration {
+            rustc_version: $crate::RUSTC_VERSION,
+            core_version: $crate::CORE_VERSION,
+            register: $register,
+        };
+    };
 }
