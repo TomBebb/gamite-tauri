@@ -12,6 +12,7 @@ const views: { name: string; value: View }[] = [
 ]
 export default function () {
     const [games, setGames] = createSignal<GameData[]>([])
+
     const [view, setView] = createSignal<View>("table")
     const [selectedGameIndex, setSelectedGameIndex] = createSignal<number>(0)
 
@@ -19,7 +20,7 @@ export default function () {
         invoke<GameData[]>("get_games")
             .then((gs) => {
                 console.info("got games", gs)
-                setGames(gs)
+                setGames(gs.map((g) => ({ ...g, genres: [] })))
             })
             .catch(console.error)
     })
