@@ -6,7 +6,7 @@ fn greet(name: &str) -> String {
 
 #[tauri::command]
 async fn get_games(db_state: tauri::State<'_, AppDbState>) -> Result<Vec<GameData>, String> {
-    println!("Getting games");
+    log::info!("Getting games");
     let db = &db_state.0;
 
     let raw: Vec<game::Game> = game::Entity::find().all(db).await.unwrap_or_default();
@@ -15,15 +15,15 @@ async fn get_games(db_state: tauri::State<'_, AppDbState>) -> Result<Vec<GameDat
 }
 
 use crate::db::{game, AppDbState};
+use env_logger::Env;
 use gamite_core::GameData;
-use sea_orm::{EntityOrSelect, EntityTrait};
+use sea_orm::{EntityTrait};
 use tauri::Manager;
 
 mod db;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub async fn run() {
-    env_logger::init();
-
+    env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
     let app = tauri::Builder::default()
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())
