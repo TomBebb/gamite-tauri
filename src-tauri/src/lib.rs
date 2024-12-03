@@ -5,19 +5,20 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-async fn get_games() -> Vec<Game> {
+async fn get_games() -> Vec<GameData> {
     log::info!("Getting games");
-    vec![Game {
+    vec![GameData {
         library_id: "152310".into(),
-        library_type: "Atelier Escha & Logy Alchemists of the Dusk Sky DX".into(),
-        name: "Demo".into(),
+        library_type: "steam".into(),
+        name: "Atelier Escha & Logy Alchemists of the Dusk Sky DX".into(),
         play_time_secs: 0,
+        description: "Traverse the land and craft stuff".into(),
         install_status: gamite_core::GameInstallStatus::Installed.into(),
         ..Default::default()
     }]
 }
 
-use crate::db::Game;
+use gamite_core::GameData;
 use tokio::runtime::Builder;
 
 mod db;
@@ -30,7 +31,7 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_gamepad::init())
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![greet, get_games])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
