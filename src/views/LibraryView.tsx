@@ -3,6 +3,7 @@ import { GameData } from "../common/models"
 import Genres from "../components/Genres"
 import { invoke } from "@tauri-apps/api/core"
 import { createEffect, createSignal, For, onMount, Show } from "solid-js"
+import ContextMenu, { ContextMenuProps } from "../components/ContextMenu"
 
 type View = "grid" | "table" | "list"
 const views: { name: string; value: View }[] = [
@@ -12,6 +13,16 @@ const views: { name: string; value: View }[] = [
 ]
 export default function () {
     const [games, setGames] = createSignal<GameData[]>([])
+    let clearGame: () => void
+    clearGame = () => {
+        console.log("clear game")
+        setContext({ game: undefined, pos: { x: 0, y: 0 }, clearGame })
+    }
+
+    const [context, setContext] = createSignal<ContextMenuProps>({
+        clearGame: clearGame,
+        pos: { x: 0, y: 0 },
+    })
 
     const [view, setView] = createSignal<View>("table")
     const [selectedGameIndex, setSelectedGameIndex] = createSignal<number>(0)
@@ -70,11 +81,24 @@ export default function () {
         }
     }
 
+    function showContextMenu(game: GameData, ev: MouseEvent) {
+        console.info("context click", { game, ev })
+        ev.preventDefault()
+        ev.stopPropagation()
+        setContext({ game, pos: { x: ev.x, y: ev.y }, clearGame })
+
+        console.log(ev.x, ev.y)
+        return false
+    }
+
     onViewChange(view())
     createEffect(() => onViewChange(view()))
     const columns = 5
     return (
         <>
+            <Show when={context()}>
+                <ContextMenu {...context()!} />
+            </Show>
             <select
                 value={view()}
                 class="show-on-desktop select"
@@ -125,9 +149,13 @@ export default function () {
                                         "bg-primary-content text-primary":
                                             index() === selectedGameIndex(),
                                     }}
-                                    on:click={() =>
+                                    on:click={() => {
                                         setSelectedGameIndex(index())
-                                    }
+                                    }}
+                                    on:contextmenu={showContextMenu.bind(
+                                        null,
+                                        game
+                                    )}
                                 >
                                     <td>{game.name}</td>
                                     <td>{game.description}</td>
