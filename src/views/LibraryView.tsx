@@ -76,6 +76,7 @@ export default function () {
     return (
         <>
             <select
+                value={view()}
                 class="show-on-desktop select"
                 on:change={(ev) => {
                     setView(
