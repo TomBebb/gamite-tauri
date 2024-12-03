@@ -1,12 +1,12 @@
 import "./index.css"
 import NavMenu from "./components/NavMenu.js"
 import { Route } from "@solidjs/router"
-import Toolbar from "./components/Titlebar"
+import Titlebar from "./components/Titlebar"
 
 export default function () {
     return (
         <>
-            <Toolbar />
+            <Titlebar />
             <NavMenu />
             <main>
                 <Route />
