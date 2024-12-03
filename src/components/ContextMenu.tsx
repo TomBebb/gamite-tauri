@@ -42,11 +42,11 @@ export default function ContextMenu(props: ContextMenuProps) {
         >
             <For each={actions()}>
                 {(item) => (
-                    <li>
-                        <a>
-                            <Icon icon={item.icon} />
-                            {item.name}
-                        </a>
+                    <li
+                        class={`bg-${item.color} text-${item.color}-content flex flex-row items-center gap-5 rounded`}
+                    >
+                        <Icon icon={item.icon} />
+                        {item.name}
                     </li>
                 )}
             </For>
