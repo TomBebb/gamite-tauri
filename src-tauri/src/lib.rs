@@ -17,12 +17,12 @@ async fn get_games(db_state: tauri::State<'_, AppDbState>) -> Result<Vec<GameDat
 use crate::db::{game, AppDbState};
 use env_logger::Env;
 use gamite_core::GameData;
-use sea_orm::{EntityTrait};
+use sea_orm::EntityTrait;
 use tauri::Manager;
-
+use tokio::runtime::Builder;
 mod db;
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
-pub async fn run() {
+pub fn run() {
     env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
     let app = tauri::Builder::default()
         .plugin(tauri_plugin_fs::init())
@@ -32,7 +32,12 @@ pub async fn run() {
         .build(tauri::generate_context!())
         .expect("error while running tauri application");
 
-    let db = db::init(&app).await;
-    app.manage(AppDbState(db));
+    let runtime = Builder::new_multi_thread().enable_all().build().unwrap();
+    runtime.block_on(async {
+        let db = db::init(&app).await;
+        app.manage(AppDbState(db));
+        log::info!("Added to app manager");
+    });
+
     app.run(|_, _| {})
 }
