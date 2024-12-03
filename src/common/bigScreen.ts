@@ -2,7 +2,7 @@ import { getCurrentWindow } from "@tauri-apps/api/window"
 import { createEffect, createSignal } from "solid-js"
 
 export const [isBigScreen, setBigScreen] = createSignal<boolean>(false)
-createEffect(isBigScreen, () => {
+createEffect(() => {
     getCurrentWindow().setFullscreen(isBigScreen()).catch(console.error)
 })
 createEffect(() => {
