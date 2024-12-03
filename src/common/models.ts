@@ -5,7 +5,9 @@ export interface GameData {
     description: string
     name: string
     installStatus: GameInstallStatus
+    iconUrl?: string
 }
+
 export enum GameInstallStatus {
     Installed,
     Installing,

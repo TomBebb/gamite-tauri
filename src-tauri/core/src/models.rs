@@ -75,6 +75,7 @@ impl IsGameLibraryRef for ScannedGameLibraryMetadata {
 }
 
 #[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize, Default)]
+#[serde(rename_all = "camelCase")]
 pub struct GameData {
     pub id: i32,
     pub name: String,

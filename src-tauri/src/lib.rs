@@ -13,6 +13,7 @@ async fn get_games() -> Vec<GameData> {
         name: "Atelier Escha & Logy Alchemists of the Dusk Sky DX".into(),
         play_time_secs: 0,
         description: "Traverse the land and craft stuff".into(),
+        icon_url: Some("file:///home/tom/.local/share/org.gamite.app/996580_icon.jpg".into()),
         install_status: gamite_core::GameInstallStatus::Installed.into(),
         ..Default::default()
     }]
@@ -29,6 +30,7 @@ pub fn run() {
     runtime.block_on(db::init());
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_gamepad::init())
         .invoke_handler(tauri::generate_handler![greet, get_games])

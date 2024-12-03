@@ -27,6 +27,8 @@ pub async fn init() {
     fs::create_dir_all(&*BASE_DATA_DIR).await.unwrap();
     let conn = connect().await;
 
-    conn.execute_unprepared(include_str!("init.sql")).await.unwrap();
+    conn.execute_unprepared(include_str!("init.sql"))
+        .await
+        .unwrap();
     log::info!("initialized game database");
 }

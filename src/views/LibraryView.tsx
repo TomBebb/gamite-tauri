@@ -4,6 +4,7 @@ import Genres from "../components/Genres"
 import { invoke } from "@tauri-apps/api/core"
 import { createEffect, createSignal, For, onMount, Show } from "solid-js"
 import ContextMenu, { ContextMenuProps } from "../components/ContextMenu"
+import UrlImage from "../components/UrlImage"
 
 type View = "grid" | "table" | "list"
 const views: { name: string; value: View }[] = [
@@ -129,6 +130,20 @@ export default function () {
                         )}
                     </For>
                 </div>
+            </Show>
+
+            <Show when={view() === "list"}>
+                <ul>
+                    <For each={games()}>
+                        {(g) => (
+                            <li class="flex flex-row">
+                                <pre></pre>
+                                <UrlImage src={g.iconUrl!} />
+                                <div>{g.name}</div>
+                            </li>
+                        )}
+                    </For>
+                </ul>
             </Show>
 
             <Show when={view() === "table"}>
