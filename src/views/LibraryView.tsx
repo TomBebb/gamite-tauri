@@ -16,7 +16,7 @@ export default function () {
     let clearGame: () => void
     clearGame = () => {
         console.log("clear game")
-        setContext({ game: undefined, pos: { x: 0, y: 0 }, clearGame })
+        setContext({ game: undefined, pos: context().pos, clearGame })
     }
 
     const [context, setContext] = createSignal<ContextMenuProps>({
