@@ -1378,6 +1378,7 @@ dependencies = [
 name = "gamite-core"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "dirs",
  "serde",
  "tokio-stream",

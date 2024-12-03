@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 use std::fmt;
 use std::time::{Duration, SystemTime};
+use chrono::{DateTime, Utc};
 use url::Url;
 
 pub trait IsGameLibraryRef {
@@ -82,8 +83,8 @@ pub struct GameData {
     pub description: String,
     pub play_time_secs: i64,
     pub install_status: GameInstallStatus,
-    pub release_date: Option<SystemTime>,
-    pub last_played: Option<SystemTime>,
+    pub release_date: Option<DateTime<Utc>>,
+    pub last_played: Option<DateTime<Utc>>,
     pub icon_url: Option<String>,
     pub header_url: Option<String>,
     pub logo_url: Option<String>,
