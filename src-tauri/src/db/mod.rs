@@ -1,34 +1,33 @@
-mod game;
-mod game_genres;
-mod genre;
+use sqlx::sqlite::{SqliteConnectOptions, SqlitePoolOptions};
+use sqlx::{ConnectOptions, Pool, Sqlite};
+use tauri::{App, Manager};
+pub type Db = Pool<Sqlite>;
 
-pub use game::Game;
-use gamite_core::BASE_DATA_DIR;
-use sea_orm::{ConnectOptions, ConnectionTrait, Database, DatabaseConnection};
-use std::cell::LazyCell;
-use std::path::PathBuf;
-use tokio::fs;
-const DB_FILE: LazyCell<PathBuf> = LazyCell::new(|| BASE_DATA_DIR.join("gamite.db"));
-pub(crate) const DB_OPTIONS: LazyCell<ConnectOptions> = LazyCell::new(|| {
-    let mut opt = ConnectOptions::new(format!("sqlite:{}?mode=rwc", DB_FILE.to_string_lossy()));
-    opt.max_connections(100)
-        .min_connections(5)
-        .sqlx_logging(true)
-        .sqlx_logging_level(log::LevelFilter::Info);
-    opt
-});
+pub struct AppState(pub Db);
 
-async fn connect() -> DatabaseConnection {
-    Database::connect(DB_OPTIONS.clone()).await.unwrap()
-}
-pub async fn init() {
-    log::info!("initializing database");
-
-    fs::create_dir_all(&*BASE_DATA_DIR).await.unwrap();
-    let conn = connect().await;
-
-    conn.execute_unprepared(include_str!("init.sql"))
+pub async fn setup_db(app: &App) -> Db {
+    let mut path = app.path().app_data_dir().expect("could not get data_dir");
+    match std::fs::create_dir_all(path.clone()) {
+        Ok(_) => {}
+        Err(err) => {
+            panic!("error creating directory {}", err);
+        }
+    };
+    path.push("db.sqlite");
+    let result = SqliteConnectOptions::new()
+        .filename(&path)
+        .create_if_missing(true)
+        .connect()
+        .await;
+    match result {
+        Ok(_) => println!("database file created"),
+        Err(err) => panic!("error creating databse file {}", err),
+    }
+    let db = SqlitePoolOptions::new()
+        .connect(path.to_str().unwrap())
         .await
         .unwrap();
-    log::info!("initialized game database");
+
+    sqlx::migrate!("./migrations").run(&db).await.unwrap();
+    db
 }

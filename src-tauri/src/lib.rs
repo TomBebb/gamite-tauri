@@ -20,20 +20,21 @@ async fn get_games() -> Vec<GameData> {
 }
 
 use gamite_core::GameData;
+use tauri::Manager;
 use tokio::runtime::Builder;
 
 mod db;
-#[cfg_attr(mobile, tauri::mobile_entry_point)]
-pub fn run() {
+pub async fn run() {
     env_logger::init();
     let runtime = Builder::new_multi_thread().enable_all().build().unwrap();
-    runtime.block_on(db::init());
-
-    tauri::Builder::default()
+    let app = tauri::Builder::default()
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())
         .plugin(tauri_plugin_gamepad::init())
         .invoke_handler(tauri::generate_handler![greet, get_games])
-        .run(tauri::generate_context!())
+        .build(tauri::generate_context!())
         .expect("error while running tauri application");
+    let db = db::setup_db(&app).await;
+    app.manage(db::AppState(db));
+    app.run(|_, _| {});
 }
