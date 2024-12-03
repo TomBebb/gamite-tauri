@@ -1,4 +1,4 @@
-use chrono::{Utc, DateTime};
+use chrono::{DateTime, Utc};
 use gamite_core::{GameData, GameInstallStatus, IsGameLibraryRef};
 use sea_orm::entity::prelude::*;
 use sea_orm::{DeriveActiveEnum, DeriveEntityModel, EnumIter};
@@ -42,10 +42,6 @@ pub struct Model {
     pub install_status: DbGameInstallStatus,
     pub release_date: Option<DateTime<Utc>>,
     pub last_played: Option<DateTime<Utc>>,
-    pub icon_url: Option<String>,
-    pub header_url: Option<String>,
-    pub logo_url: Option<String>,
-    pub hero_url: Option<String>,
     pub library_type: String,
     pub library_id: String,
 }
@@ -59,10 +55,6 @@ impl Default for Game {
             install_status: DbGameInstallStatus::InLibrary,
             last_played: None,
             release_date: None,
-            icon_url: None,
-            header_url: None,
-            logo_url: None,
-            hero_url: None,
             library_type: String::new(),
             library_id: String::new(),
         }
@@ -100,17 +92,17 @@ impl Into<GameData> for Game {
     fn into(self) -> GameData {
         GameData {
             library_id: self.library_id,
-            icon_url: self.icon_url,
+            icon_url: None,
             description: self.description,
             name: self.name,
-            header_url: self.header_url,
+            header_url: None,
             id: self.id,
-            hero_url: self.hero_url,
+            hero_url: None,
             install_status: self.install_status.into(),
             last_played: self.last_played.into(),
             library_type: self.library_type,
 
-            logo_url: self.logo_url,
+            logo_url: None,
             play_time_secs: self.play_time_secs,
             release_date: self.release_date.into(),
         }
