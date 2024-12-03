@@ -5,8 +5,14 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-async fn get_games() -> Vec<GameData> {
+async fn get_games(state: tauri::State<'_, AppState>) -> Vec<GameData> {
     log::info!("Getting games");
+    sqlx::query_as::<_, DbGame>("SELECT * FROM games")
+        .fetch(&state.0)
+        .try_collect()
+        .await
+        .map_err(|e| format!("Failed to get todos {}", e))?
+        .unwrap();
     vec![GameData {
         library_id: "152310".into(),
         library_type: "steam".into(),
@@ -19,6 +25,7 @@ async fn get_games() -> Vec<GameData> {
     }]
 }
 
+use crate::db::{AppState, DbGame};
 use gamite_core::GameData;
 use tauri::Manager;
 use tokio::runtime::Builder;

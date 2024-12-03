@@ -1,6 +1,9 @@
 use sqlx::sqlite::{SqliteConnectOptions, SqlitePoolOptions};
 use sqlx::{ConnectOptions, Pool, Sqlite};
 use tauri::{App, Manager};
+
+mod game;
+pub use game::*;
 pub type Db = Pool<Sqlite>;
 
 pub struct AppState(pub Db);
