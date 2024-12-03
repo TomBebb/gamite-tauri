@@ -10,7 +10,9 @@ export default function () {
                     <li>
                         <a
                             href={route.path}
-                            class="{active: route.path === $route.path}"
+                            classList={{
+                                active: true,
+                            }}
                         >
                             <Icon icon={route.icon} />
                             {route.name}

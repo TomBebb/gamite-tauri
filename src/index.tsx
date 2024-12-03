@@ -2,7 +2,7 @@ import { routes } from "./router"
 import { enableMapSet } from "immer"
 import "./common/bigScreen.ts"
 import { render } from "solid-js/web"
-import { Router } from "@solidjs/router"
+import { MemoryRouter } from "@solidjs/router"
 import App from "./App"
 import { window } from "@tauri-apps/api"
 
@@ -22,7 +22,7 @@ render(
     () => (
         <>
             <App />
-            <Router>{routes}</Router>
+            <MemoryRouter explicitLinks={true}>{routes}</MemoryRouter>
         </>
     ),
     root
