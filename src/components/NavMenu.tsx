@@ -1,4 +1,4 @@
-import { routes } from "../router"
+import { routes } from "../routes"
 import { For } from "solid-js"
 import { Icon } from "@iconify-icon/solid"
 

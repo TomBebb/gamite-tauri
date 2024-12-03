@@ -1,4 +1,4 @@
-import { routes } from "./router"
+import { routes } from "./routes"
 import { enableMapSet } from "immer"
 import "./common/bigScreen.ts"
 import { render } from "solid-js/web"
