@@ -3,7 +3,7 @@ import { inputEmitter, MappedButton } from "../common/input"
 import { GameData } from "../common/models"
 import Genres from "../components/Genres.vue"
 import { invoke } from "@tauri-apps/api/core"
-import ContextMenu, { ContextMenuProps } from "../components/ContextMenu.vue"
+import ContextMenu from "../components/ContextMenu.vue"
 import UrlImage from "../components/UrlImage.vue"
 import { onMounted, ref, watchEffect } from "vue"
 
@@ -14,17 +14,6 @@ const views: { name: string; value: View }[] = [
     { name: "List View", value: "list" },
 ]
 const games = ref<GameData[]>([])
-let clearGame: () => void
-clearGame = () => {
-    console.log("clear game")
-    context.value = { game: undefined, pos: context.value.pos, clearGame }
-}
-
-const context = ref<ContextMenuProps>({
-    clearGame: clearGame,
-    pos: { x: 0, y: 0 },
-})
-
 const view = ref<View>("table")
 const selectedGameIndex = ref<number>(0)
 
@@ -81,22 +70,11 @@ function onViewChange(view: View) {
     }
 }
 
-function showContextMenu(game: GameData, ev: MouseEvent) {
-    console.info("context click", { game, ev })
-    ev.preventDefault()
-    ev.stopPropagation()
-    context.value = { game, pos: { x: ev.x, y: ev.y }, clearGame }
-
-    console.log(ev.x, ev.y)
-    return false
-}
-
 onViewChange(view.value)
 watchEffect(() => onViewChange(view.value))
 const columns = 5
 </script>
 <template>
-    <ContextMenu v-bind="context" />
     <v-select
         :items="views"
         item-title="name"
@@ -136,8 +114,8 @@ const columns = 5
             <tr
                 v-for="(game, index) in games"
                 @click="selectedGameIndex = index"
-                @contextmenu="showContextMenu(game, $event)"
             >
+                <ContextMenu :game="game" />
                 <td>{{ game.name }}</td>
                 <td>{{ game.description }}</td>
                 <td>
