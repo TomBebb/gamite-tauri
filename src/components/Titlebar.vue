@@ -26,23 +26,25 @@ function toggleMaximize() {
                 }
             "
         />
-        <button class="btn btn-accent btn-sm" @click="toggleMaximize">
-            <Icon
-                size="2"
-                :icon="`mdi:window-${maximized ? 'restore' : 'maximize'}`"
-            />
-        </button>
-        <button
-            class="btn btn-warning btn-sm"
-            @click="main.minimize().catch(console.error)"
-        >
-            <Icon icon="mdi:window-minimize" />
-        </button>
-        <button
-            class="btn btn-error btn-sm"
-            @click="main.close().catch(console.error)"
-        >
-            <Icon icon="mdi:window-close" />
-        </button>
+        <ButtonGroup>
+            <Button @click="toggleMaximize">
+                <template #icon>
+                    <Icon
+                        size="2"
+                        :icon="`mdi:window-${maximized ? 'restore' : 'maximize'}`"
+                    />
+                </template>
+            </Button>
+            <Button @click="main.minimize().catch(console.error)">
+                <template #icon>
+                    <Icon icon="mdi:window-minimize" />
+                </template>
+            </Button>
+            <Button @click="main.close().catch(console.error)"
+                ><template #icon>
+                    <Icon icon="mdi:window-close" />
+                </template>
+            </Button>
+        </ButtonGroup>
     </div>
 </template>

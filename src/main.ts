@@ -18,4 +18,7 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 }
 
 enableMapSet()
-createApp(App).use(router).use(PrimeVue, {theme:{preset: Aura}}).mount("#app")
+createApp(App)
+    .use(router)
+    .use(PrimeVue, { theme: { preset: Aura } })
+    .mount("#app")
