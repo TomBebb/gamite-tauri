@@ -12,9 +12,12 @@ function toggleMaximize() {
 }
 </script>
 <template>
-    <div class="flex flex-row gap-2" @dblclick="toggleMaximize">
+    <div
+        class="flex h-10 flex-row items-center gap-2 bg-gray-100 px-1"
+        @dblclick="toggleMaximize"
+    >
         <div
-            class="flex-1"
+            class="flex-1 bg-gray-100"
             @mousedown="
                 (ev) => {
                     if (ev.buttons === 1 && ev.detail === 1) {

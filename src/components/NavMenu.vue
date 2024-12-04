@@ -7,6 +7,7 @@ import { Icon } from "@iconify/vue"
         <li v-for="route in routes">
             <RouterLink
                 :to="route.path"
+                class="cursor-pointer"
                 :class="{ active: route.path === $route.fullPath }"
             >
                 <Icon :icon="route.icon" />
