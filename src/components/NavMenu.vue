@@ -5,7 +5,7 @@ import { Icon } from "@iconify/vue"
 <template>
     <Menu :model="routes">
         <template #item="{ item }">
-            <router-link :to="item.path" class="reset">
+            <router-link v-ripple :to="item.path" class="reset w-full my-nav">
                 <Icon :icon="item.icon!" />
                 <span class="ml-2">{{ item.name }}</span>
             </router-link>

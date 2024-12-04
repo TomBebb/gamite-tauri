@@ -10,3 +10,11 @@ body.big-screen .show-on-big-screen {
 body:not(.big-screen) .show-on-desktop {
     display: unset;
 }
+
+.p-menu-item-content:has(.my-nav) {
+    display: flex;
+    flex-direction: row;
+}
+.my-nav {
+    flex: 1;
+}
