@@ -1,4 +1,8 @@
-import { RouteRecordSingleView } from "vue-router"
+import {
+    createMemoryHistory,
+    createRouter,
+    RouteRecordSingleView,
+} from "vue-router"
 
 export const routes: (RouteRecordSingleView & {
     name: string
@@ -17,3 +21,10 @@ export const routes: (RouteRecordSingleView & {
         icon: "mdi:cog",
     },
 ]
+
+const router = createRouter({
+    history: createMemoryHistory(),
+    routes,
+})
+
+export default router

@@ -1,10 +1,9 @@
-import { routes } from "./router"
 import { enableMapSet } from "immer"
 import "./common/bigScreen.ts"
-import { render } from "solid-js/web"
-import { MemoryRouter } from "@solidjs/router"
 import App from "./App.vue"
 import { window } from "@tauri-apps/api"
+import { createApp } from "vue"
+import router from "./router"
 
 const w = window.getCurrentWindow()
 await w.setDecorations(false)
@@ -17,13 +16,4 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 }
 
 enableMapSet()
-
-render(
-    () => (
-        <>
-            <App />
-            <MemoryRouter explicitLinks={true}>{routes}</MemoryRouter>
-        </>
-    ),
-    root
-)
+createApp(App).use(router).mount("#app")
