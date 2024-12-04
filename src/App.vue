@@ -2,16 +2,23 @@
 import "./index.css"
 import NavMenu from "./components/NavMenu.vue"
 import Titlebar from "./components/Titlebar.vue"
+import { VaLayout } from "vuestic-ui"
+import { ref } from "vue"
+
+const showDrawer = ref(false)
 </script>
 <template>
-    <Titlebar class="sticky top-0 z-[100]" />
-    <div class="drawer drawer-open">
-        <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
-        <div class="drawer-content flex flex-col p-5">
+    <VaLayout>
+        <template #top>
+            <Titlebar class="sticky top-0 z-[100]" />
+        </template>
+
+        <template #left>
+            <NavMenu />
+        </template>
+
+        <template #content>
             <RouterView />
-        </div>
-        <div class="drawer-side flex w-56 flex-row bg-base-200">
-            <NavMenu class="flex-1" />
-        </div>
-    </div>
+        </template>
+    </VaLayout>
 </template>

@@ -1,18 +1,26 @@
 <script setup lang="ts">
 import { routes } from "../router"
-import { Icon } from "@iconify/vue"
+import {
+    VaIcon,
+    VaSidebar,
+    VaSidebarItem,
+    VaSidebarItemContent,
+} from "vuestic-ui"
 </script>
 <template>
-    <ul class="menu menu-md w-56 bg-base-200">
-        <li v-for="route in routes">
-            <RouterLink
-                :to="route.path"
-                class="cursor-pointer"
-                :class="{ active: route.path === $route.fullPath }"
-            >
-                <Icon :icon="route.icon" />
-                {{ route.name }}
+    <VaSidebar :model-value="true">
+        <VaSidebarItem
+            v-for="route in routes"
+            :active="route.path === $route.fullPath"
+        >
+            <RouterLink :to="route.path">
+                <VaSidebarItemContent>
+                    <VaIcon :name="route.icon" />
+                    <VaSidebarItemContent>
+                        {{ route.name }}
+                    </VaSidebarItemContent>
+                </VaSidebarItemContent>
             </RouterLink>
-        </li>
-    </ul>
+        </VaSidebarItem>
+    </VaSidebar>
 </template>
