@@ -4,6 +4,8 @@ import App from "./App.vue"
 import { window } from "@tauri-apps/api"
 import { createApp } from "vue"
 import router from "./router"
+import "vuestic-ui/css"
+import { createVuestic } from "vuestic-ui"
 
 const w = window.getCurrentWindow()
 await w.setDecorations(false)
@@ -16,4 +18,5 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 }
 
 enableMapSet()
-createApp(App).use(router).mount("#app")
+
+createApp(App).use(createVuestic()).use(router).mount("#app")
