@@ -4,21 +4,22 @@ import {
     RouteRecordSingleView,
 } from "vue-router"
 
-export const routes: (RouteRecordSingleView & {
+export interface MyRoute extends RouteRecordSingleView {
     name: string
     icon: string
-})[] = [
+}
+export const routes: MyRoute[] = [
     {
         path: "/",
         component: () => import("./views/LibraryView.vue"),
         name: "Library",
-        icon: "mdi:books",
+        icon: "mdi-library",
     },
     {
         path: "/settings",
         component: () => import("./views/SettingsView.vue"),
         name: "Settings",
-        icon: "mdi:cog",
+        icon: "mdi-cog",
     },
 ]
 

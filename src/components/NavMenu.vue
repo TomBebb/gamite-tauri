@@ -13,6 +13,7 @@ function onClick(route: RouteRecordSingleView, ev: Event) {
             v-for="route in routes"
             :title="route.name"
             :href="route.path"
+            :prepend-icon="route.icon"
             @click="onClick(route, $event)"
         />
     </v-navigation-drawer>
