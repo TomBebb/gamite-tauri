@@ -97,11 +97,12 @@ const columns = 5
 </script>
 <template>
     <ContextMenu v-bind="context" />
-    <select v-bind:value="view" class="show-on-desktop select">
-        <option v-for="view in views" :value="view.value">
-            {{ view.name }}
-        </option>
-    </select>
+    <v-select
+        :items="views"
+        item-title="name"
+        v-model="view"
+        class="show-on-desktop select"
+    />
     <div v-if="view === 'grid'" :class="`grid gap-2 grid-cols-${columns}`">
         <div
             v-for="(game, index) in games"
@@ -115,15 +116,15 @@ const columns = 5
         </div>
     </div>
 
-    <ul v-else-if="view === 'list'">
+    <div v-else-if="view === 'list'">
         <li v-for="g in games" class="flex flex-row">
             <pre></pre>
             <UrlImage :src="g.iconUrl!" />
             <div>{{ g.name }}</div>
         </li>
-    </ul>
+    </div>
 
-    <table v-else-if="view === 'table'" class="table select-none">
+    <v-table v-else-if="view === 'table'">
         <thead>
             <tr>
                 <th>Name</th>
@@ -134,20 +135,15 @@ const columns = 5
         <tbody>
             <tr
                 v-for="(game, index) in games"
-                class="cursor-pointer"
-                :class="{
-                    'bg-primary-content text-primary':
-                        index === selectedGameIndex,
-                }"
                 @click="selectedGameIndex = index"
                 @contextmenu="showContextMenu(game, $event)"
             >
                 <td>{{ game.name }}</td>
                 <td>{{ game.description }}</td>
-                <td class="flex gap-2">
+                <td>
                     <Genres :genres="game.genres" />
                 </td>
             </tr>
         </tbody>
-    </table>
+    </v-table>
 </template>
