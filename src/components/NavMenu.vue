@@ -3,7 +3,7 @@ import { routes } from "../router"
 import { Icon } from "@iconify/vue"
 </script>
 <template>
-    <ul class="menu menu-md w-56 rounded-box bg-base-200">
+    <ul class="menu menu-md w-56 bg-base-200">
         <li v-for="route in routes">
             <RouterLink
                 :to="route.path"
