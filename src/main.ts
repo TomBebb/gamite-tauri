@@ -3,7 +3,7 @@ import { enableMapSet } from "immer"
 import "./common/bigScreen.ts"
 import { render } from "solid-js/web"
 import { MemoryRouter } from "@solidjs/router"
-import App from "./App"
+import App from "./App.vue"
 import { window } from "@tauri-apps/api"
 
 const w = window.getCurrentWindow()

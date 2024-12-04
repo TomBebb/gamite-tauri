@@ -1,7 +1,7 @@
+<script setup lang="ts"></script>
 import "./index.css"
-import NavMenu from "./components/NavMenu.js"
-import { Route } from "@solidjs/router"
-import Titlebar from "./components/Titlebar"
+import NavMenu from "./components/NavMenu.vue"
+import Titlebar from "./components/Titlebar.vue"
 
 export default function () {
     return (

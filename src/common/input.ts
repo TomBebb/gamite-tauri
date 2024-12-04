@@ -1,7 +1,7 @@
 import mitt, { Emitter } from "mitt"
 import { produce } from "immer"
-import { isBigScreen } from "./bigScreen"
-import { createEffect, createSignal } from "solid-js"
+import { ref, watchEffect } from "vue"
+import { bigScreen } from "./bigScreen"
 
 export const enum MappedButton {
     Down = "down",
@@ -15,19 +15,20 @@ export type InputEvents = {
     released: MappedButton
 }
 export const inputEmitter: Emitter<InputEvents> = mitt<InputEvents>()
-export const [currButtons, setCurrButtons] = createSignal<Set<MappedButton>>(
-    new Set()
-)
 
-inputEmitter.on("pressed", (btn) =>
-    setCurrButtons(produce(currButtons(), (st) => st.add(btn)))
+const currButtons = ref<Set<MappedButton>>(new Set())
+
+inputEmitter.on(
+    "pressed",
+    (btn) =>
+        (currButtons.value = produce(currButtons.value, (st) => st.add(btn)))
 )
-inputEmitter.on("released", (btn) =>
-    setCurrButtons(
-        produce(currButtons(), (st) => {
+inputEmitter.on(
+    "released",
+    (btn) =>
+        (currButtons.value = produce(currButtons.value, (st) => {
             st.delete(btn)
-        })
-    )
+        }))
 )
 function mapKey(event: KeyboardEvent): null | MappedButton {
     switch (event.key) {
@@ -113,19 +114,19 @@ function setGamepadInterval(): number {
                 pressed.add(y > 0 ? MappedButton.Down : MappedButton.Up)
             }
         }
-        for (const currBtn of currButtons()) {
+        for (const currBtn of currButtons.value) {
             if (!pressed.has(currBtn)) inputEmitter.emit("released", currBtn)
         }
         for (const pressedBtn of pressed) {
-            if (!currButtons().has(pressedBtn))
+            if (!currButtons.value.has(pressedBtn))
                 inputEmitter.emit("pressed", pressedBtn)
         }
     }, 1000 / 100)
 }
 let gamepadInterval: number
 
-createEffect(() => {
-    const bs = isBigScreen()
+watchEffect(() => {
+    const bs = bigScreen.value
     console.debug("isBigScreen", bs)
     if (bs) {
         gamepadInterval = setGamepadInterval()

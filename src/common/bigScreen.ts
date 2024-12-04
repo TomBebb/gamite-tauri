@@ -1,17 +1,17 @@
 import { getCurrentWindow } from "@tauri-apps/api/window"
-import { createEffect, createSignal } from "solid-js"
+import { ref, watchEffect } from "vue"
 
-export const [isBigScreen, setBigScreen] = createSignal<boolean>(false)
-createEffect(() => {
-    getCurrentWindow().setFullscreen(isBigScreen()).catch(console.error)
+export const bigScreen = ref<boolean>(false)
+watchEffect(() => {
+    getCurrentWindow().setFullscreen(bigScreen.value).catch(console.error)
 })
-createEffect(() => {
-    if (isBigScreen()) document.body.classList.add("big-screen")
+watchEffect(() => {
+    if (bigScreen.value) document.body.classList.add("big-screen")
     else document.body.classList.remove("big-screen")
 })
 window.addEventListener("keydown", (event: KeyboardEvent) => {
     console.debug(event.code)
     if (event.code === "F11") {
-        setBigScreen(!isBigScreen())
+        bigScreen.value = !bigScreen.value
     }
 })

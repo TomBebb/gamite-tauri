@@ -11,17 +11,18 @@
         "format": "prettier src --write"
     },
     "dependencies": {
-        "@solidjs/router": "^0.15.1",
         "@tauri-apps/api": "^2",
         "@tauri-apps/plugin-fs": "~2",
         "@tauri-apps/plugin-shell": "^2",
         "immer": "^10.1.1",
         "mitt": "^3.0.1",
-        "solid-js": "^1.9.3"
+        "vue": "^3.5.13",
+        "vue-router": "^4.5.0"
     },
     "devDependencies": {
-        "@iconify-icon/solid": "^2.1.1",
+        "@iconify/vue": "^4.1.2",
         "@tauri-apps/cli": "^2",
+        "@vitejs/plugin-vue": "^5.2.1",
         "autoprefixer": "^10.4.20",
         "daisyui": "^4.12.14",
         "postcss": "^8.4.49",
@@ -29,7 +30,6 @@
         "prettier-plugin-tailwindcss": "^0.6.8",
         "tailwindcss": "^3.4.15",
         "typescript": "^5.2.2",
-        "vite": "^5.3.1",
-        "vite-plugin-solid": "^2.10.2"
+        "vite": "^5.3.1"
     }
 }

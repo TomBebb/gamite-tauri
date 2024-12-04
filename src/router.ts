@@ -1,16 +1,18 @@
-import { RouteDefinition } from "@solidjs/router"
-import { lazy } from "solid-js"
+import { RouteRecordSingleView } from "vue-router"
 
-export const routes: (RouteDefinition & { name: string; icon: string })[] = [
+export const routes: (RouteRecordSingleView & {
+    name: string
+    icon: string
+})[] = [
     {
         path: "/",
-        component: lazy(() => import("./views/LibraryView.js")),
+        component: () => import("./views/LibraryView.vue"),
         name: "Library",
         icon: "mdi:books",
     },
     {
         path: "/settings",
-        component: lazy(() => import("./views/SettingsView.js")),
+        component: () => import("./views/SettingsView.vue"),
         name: "Settings",
         icon: "mdi:cog",
     },
