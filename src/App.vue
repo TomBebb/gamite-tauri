@@ -4,8 +4,8 @@ import NavMenu from "./components/NavMenu.vue"
 import Titlebar from "./components/Titlebar.vue"
 </script>
 <template>
-    <Titlebar class="sticky top-0 z-[100]" />
     <v-app>
+        <Titlebar class="sticky top-0 z-[100]" />
         <NavMenu />
         <v-main>
             <RouterView />

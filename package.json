@@ -22,6 +22,7 @@
     },
     "devDependencies": {
         "@iconify/vue": "^4.1.2",
+        "@mdi/font": "^7.4.47",
         "@tauri-apps/cli": "^2",
         "@vitejs/plugin-vue": "^5.2.1",
         "prettier": "^3.3.3",

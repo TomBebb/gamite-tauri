@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { window } from "@tauri-apps/api"
 import { ref } from "vue"
-import { Icon } from "@iconify/vue"
 
 const main = window.getCurrentWindow()
 const maximized = ref(false)
@@ -12,10 +11,8 @@ function toggleMaximize() {
 }
 </script>
 <template>
-    <div
-        class="flex h-10 flex-row items-center gap-2 bg-gray-100 px-1"
-        @dblclick="toggleMaximize"
-    >
+    <v-app-bar @dblclick="toggleMaximize">
+        <v-app-bar-title tag="h1">Gamite</v-app-bar-title>
         <div
             class="flex-1 bg-gray-100"
             @mousedown="
@@ -26,23 +23,19 @@ function toggleMaximize() {
                 }
             "
         />
-        <button class="btn btn-accent btn-sm" @click="toggleMaximize">
-            <Icon
-                size="2"
-                :icon="`mdi:window-${maximized ? 'restore' : 'maximize'}`"
+        <v-btn-group>
+            <v-btn
+                :icon="`mdi-window-${maximized ? 'restore' : 'maximize'}`"
+                @click="toggleMaximize"
             />
-        </button>
-        <button
-            class="btn btn-warning btn-sm"
-            @click="main.minimize().catch(console.error)"
-        >
-            <Icon icon="mdi:window-minimize" />
-        </button>
-        <button
-            class="btn btn-error btn-sm"
-            @click="main.close().catch(console.error)"
-        >
-            <Icon icon="mdi:window-close" />
-        </button>
-    </div>
+            <v-btn
+                icon="mdi-window-minimize"
+                @click="main.minimize().catch(console.error)"
+            />
+            <v-btn
+                icon="mdi-window-close"
+                @click="main.close().catch(console.error)"
+            />
+        </v-btn-group>
+    </v-app-bar>
 </template>

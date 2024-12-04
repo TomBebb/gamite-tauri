@@ -36,6 +36,9 @@ importers:
       '@iconify/vue':
         specifier: ^4.1.2
         version: 4.1.2(vue@3.5.13(typescript@5.6.3))
+      '@mdi/font':
+        specifier: ^7.4.47
+        version: 7.4.47
       '@tauri-apps/cli':
         specifier: ^2
         version: 2.1.0
@@ -222,6 +225,9 @@ packages:
 
   '@jridgewell/sourcemap-codec@1.5.0':
     resolution: {integrity: sha512-gv3ZRaISU3fjPAgNsriBRqGWQL6quFx04YMPW/zD8XMLsU32mhCCbfbO6KZFLjvYpCZ8zyDEgqsgf+PwPaM7GQ==}
+
+  '@mdi/font@7.4.47':
+    resolution: {integrity: sha512-43MtGpd585SNzHZPcYowu/84Vz2a2g31TvPMTm9uTiCSWzaheQySUcSyUH/46fPnuPQWof2yd0pGBtzee/IQWw==}
 
   '@rollup/rollup-android-arm-eabi@4.27.3':
     resolution: {integrity: sha512-EzxVSkIvCFxUd4Mgm4xR9YXrcp976qVaHnqom/Tgm+vU79k4vV4eYTjmRvGfeoW8m9LVcsAy/lGjcgVegKEhLQ==}
@@ -696,6 +702,8 @@ snapshots:
       vue: 3.5.13(typescript@5.6.3)
 
   '@jridgewell/sourcemap-codec@1.5.0': {}
+
+  '@mdi/font@7.4.47': {}
 
   '@rollup/rollup-android-arm-eabi@4.27.3':
     optional: true
