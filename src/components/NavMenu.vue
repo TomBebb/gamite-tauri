@@ -5,13 +5,13 @@ import { Icon } from "@iconify/vue"
 <template>
     <ul class="menu menu-md w-56 rounded-box bg-base-200">
         <li v-for="route in routes">
-            <a
-                :href="route.path"
+            <RouterLink
+                :to="route.path"
                 :class="{ active: route.path === $route.fullPath }"
             >
                 <Icon :icon="route.icon" />
                 {{ route.name }}
-            </a>
+            </RouterLink>
         </li>
     </ul>
 </template>
