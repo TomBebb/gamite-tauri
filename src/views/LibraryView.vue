@@ -96,26 +96,23 @@ watchEffect(() => onViewChange(view.value))
 const columns = 5
 </script>
 <template>
-    <ContextMenu {...context()!} />
+    <ContextMenu :game="context.game" :pos="context.pos" />;
     <select v-bind:value="view" class="show-on-desktop select">
-        <option v-for="view in views" value="{view.value}">
+        <option v-for="view in views" :value="view.value">
             {{ view.name }}
         </option>
     </select>
     <div v-if="view === 'grid'" :class="`grid gap-2 grid-cols-${columns}`">
-        <For each="{games()}">
-            <div
-                v-for="(_game, index) in games"
-                class="flex cursor-pointer flex-col items-center rounded-sm border-[1px]"
-                @click="selectedGameIndex = index"
-                :class="{
-                    'bg-primary-content text-primary':
-                        index === selectedGameIndex,
-                }"
-            >
-                <div>{game.name}</div>
-            </div>
-        </For>
+        <div
+            v-for="(game, index) in games"
+            class="flex cursor-pointer flex-col items-center rounded-sm border-[1px]"
+            @click="selectedGameIndex = index"
+            :class="{
+                'bg-primary-content text-primary': index === selectedGameIndex,
+            }"
+        >
+            <div>{{ game.name }}</div>
+        </div>
     </div>
 
     <ul v-else-if="view === 'list'">
@@ -145,9 +142,8 @@ const columns = 5
                 @click="selectedGameIndex = index"
                 @contextmenu="showContextMenu.bind(null, game)"
             >
-                >
-                <td>{game.name}</td>
-                <td>{game.description}</td>
+                <td>{{ game.name }}</td>
+                <td>{{ game.description }}</td>
                 <td class="flex gap-2">
                     <Genres :genres="game.genres" />
                 </td>
