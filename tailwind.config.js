@@ -2,7 +2,7 @@ import daisyui from "daisyui"
 
 /** @type {import("tailwindcss").Config} */
 const config = {
-    content: ["./index.html", "./src/**/*.{jsx,tsx}"],
+    content: ["./index.html", "./src/**/*.{jsx,vue}"],
     safelist: [
         { pattern: /grid-cols-[0-9]+/ },
         { pattern: /^(bg|text|border)-([a-z]+)(-content)?$/ },

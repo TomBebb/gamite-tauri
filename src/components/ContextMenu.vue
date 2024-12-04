@@ -2,7 +2,7 @@
 import { GameData, GameInstallStatus } from "../common/models"
 import { getActionData, getGameActions } from "../common/gameActions"
 import { Icon } from "@iconify/vue"
-import { computed, onMounted, onUnmounted, ref } from "vue"
+import { computed, onMounted, onUnmounted, useTemplateRef } from "vue"
 
 export interface ContextMenuProps {
     game?: GameData
@@ -11,7 +11,8 @@ export interface ContextMenuProps {
     clearGame(): void
 }
 const props = defineProps<ContextMenuProps>()
-let el = ref<HTMLDivElement>()
+const show = ref(false)
+let el = useTemplateRef<HTMLDivElement>("el")
 
 const actions = computed(() =>
     getGameActions(
@@ -35,9 +36,9 @@ onUnmounted(() => {
 </script>
 <template>
     <ul
-        :ref="el as any"
+        ref="el"
         class="menu absolute z-10 w-60 rounded-box bg-base-200 transition-opacity"
-        :class="{ 'opacity-0': props.game === undefined }"
+        :class="{ 'opacity-0': props?.game === undefined }"
         :style="{ top: props.pos.y + 'px', left: props.pos.x + 'px' }"
     >
         <li

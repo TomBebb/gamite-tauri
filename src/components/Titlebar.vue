@@ -24,7 +24,10 @@ function toggleMaximize() {
             "
         />
         <button class="btn btn-accent btn-sm" @click="toggleMaximize">
-            <Icon :icon="`mdi:window-${maximized ? 'restore' : 'maximize'}`" />
+            <Icon
+                size="2"
+                :icon="`mdi:window-${maximized ? 'restore' : 'maximize'}`"
+            />
         </button>
         <button
             class="btn btn-warning btn-sm"

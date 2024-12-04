@@ -1,6 +1,6 @@
 import {
-    createMemoryHistory,
     createRouter,
+    createWebHistory,
     RouteRecordSingleView,
 } from "vue-router"
 
@@ -23,7 +23,7 @@ export const routes: (RouteRecordSingleView & {
 ]
 
 const router = createRouter({
-    history: createMemoryHistory(),
+    history: createWebHistory(),
     routes,
 })
 

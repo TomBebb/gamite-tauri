@@ -10,7 +10,7 @@ import { Icon } from "@iconify/vue"
                 :class="{ active: route.path === $route.fullPath }"
             >
                 <Icon :icon="route.icon" />
-                {route.name}
+                {{ route.name }}
             </a>
         </li>
     </ul>

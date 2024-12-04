@@ -3,7 +3,7 @@ import { inputEmitter, MappedButton } from "../common/input"
 import { GameData } from "../common/models"
 import Genres from "../components/Genres.vue"
 import { invoke } from "@tauri-apps/api/core"
-import ContextMenu, { ContextMenuProps } from "../components/ContextMenu.vue"
+import { ContextMenuProps } from "../components/ContextMenu.vue"
 import UrlImage from "../components/UrlImage.vue"
 import { onMounted, ref, watchEffect } from "vue"
 
@@ -96,7 +96,7 @@ watchEffect(() => onViewChange(view.value))
 const columns = 5
 </script>
 <template>
-    <ContextMenu :game="context.game" :pos="context.pos" />;
+    <!--    <ContextMenu v-bind="context" />-->
     <select v-bind:value="view" class="show-on-desktop select">
         <option v-for="view in views" :value="view.value">
             {{ view.name }}
