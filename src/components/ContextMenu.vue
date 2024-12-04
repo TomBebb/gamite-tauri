@@ -2,7 +2,7 @@
 import { GameData, GameInstallStatus } from "../common/models"
 import { getActionData, getGameActions } from "../common/gameActions"
 import { Icon } from "@iconify/vue"
-import { computed, onMounted, onUnmounted, useTemplateRef } from "vue"
+import { computed, onMounted, onUnmounted, ref, useTemplateRef } from "vue"
 
 export interface ContextMenuProps {
     game?: GameData
