@@ -3,16 +3,18 @@ import { routes } from "../router"
 import { Icon } from "@iconify/vue"
 </script>
 <template>
-    <ul class="menu menu-md w-56 bg-base-200">
-        <li v-for="route in routes">
-            <RouterLink
-                :to="route.path"
-                class="cursor-pointer"
-                :class="{ active: route.path === $route.fullPath }"
-            >
-                <Icon :icon="route.icon" />
-                {{ route.name }}
-            </RouterLink>
-        </li>
-    </ul>
+    <Menu :model="routes">
+        <template #item="{item}">
+            <router-link :to="item.path" class="reset">
+                <Icon :icon="item.icon!" />
+                <span class="ml-2">{{item.name}}</span>
+            </router-link>
+        </template>
+    </Menu>
 </template>
+<style scoped>
+.reset {
+    text-decoration :none !important;
+    color: inherit !important;
+}
+</style>
