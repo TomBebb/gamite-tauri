@@ -6,6 +6,7 @@ import { createApp } from "vue"
 import router from "./router"
 import PrimeVue from "primevue/config"
 import Aura from "@primevue/themes/aura"
+import Tooltip from "primevue/tooltip"
 
 const w = window.getCurrentWindow()
 await w.setDecorations(false)
@@ -20,5 +21,6 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 enableMapSet()
 createApp(App)
     .use(router)
+    .directive("tooltip", Tooltip)
     .use(PrimeVue, { theme: { preset: Aura } })
     .mount("#app")

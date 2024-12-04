@@ -4,17 +4,17 @@ import { Icon } from "@iconify/vue"
 </script>
 <template>
     <Menu :model="routes">
-        <template #item="{item}">
+        <template #item="{ item }">
             <router-link :to="item.path" class="reset">
                 <Icon :icon="item.icon!" />
-                <span class="ml-2">{{item.name}}</span>
+                <span class="ml-2">{{ item.name }}</span>
             </router-link>
         </template>
     </Menu>
 </template>
 <style scoped>
 .reset {
-    text-decoration :none !important;
+    text-decoration: none !important;
     color: inherit !important;
 }
 </style>
