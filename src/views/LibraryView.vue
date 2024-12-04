@@ -6,12 +6,13 @@ import { invoke } from "@tauri-apps/api/core"
 import ContextMenu, { ContextMenuProps } from "../components/ContextMenu.vue"
 import UrlImage from "../components/UrlImage.vue"
 import { onMounted, ref, watchEffect } from "vue"
+import { Icon } from "@iconify/vue"
 
 type View = "grid" | "table" | "list"
-const views: { name: string; value: View }[] = [
-    { name: "Grid View", value: "grid" },
-    { name: "Table View", value: "table" },
-    { name: "List View", value: "list" },
+const views: { name: string; value: View , icon: string}[] = [
+    { name: "Grid View", value: "grid" , icon: "mdi:grid"},
+    { name: "Table View", value: "table",icon: "mdi:table" },
+    { name: "List View", value: "list" , icon: "mdi:format-list-bulleted"},
 ]
 const games = ref<GameData[]>([])
 let clearGame: () => void
@@ -97,6 +98,11 @@ const columns = 5
 </script>
 <template>
     <ContextMenu v-bind="context" />
+    <SelectButton  option-value="value" :options="views" option-label="name" v-model="view" >
+        <template #option="{option: {name, icon}}">
+            <Icon :aria-label="name" :icon="icon"/>
+        </template>
+        </SelectButton>
     <select v-bind:value="view" class="show-on-desktop select">
         <option v-for="view in views" :value="view.value">
             {{ view.name }}
