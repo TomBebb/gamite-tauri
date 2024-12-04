@@ -4,6 +4,8 @@ import App from "./App.vue"
 import { window } from "@tauri-apps/api"
 import { createApp } from "vue"
 import router from "./router"
+import PrimeVue from "primevue/config"
+import Aura from "@primevue/themes/aura"
 
 const w = window.getCurrentWindow()
 await w.setDecorations(false)
@@ -16,4 +18,4 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
 }
 
 enableMapSet()
-createApp(App).use(router).mount("#app")
+createApp(App).use(router).use(PrimeVue, {theme:{preset: Aura}}).mount("#app")
