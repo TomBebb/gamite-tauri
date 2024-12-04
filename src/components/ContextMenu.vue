@@ -34,7 +34,7 @@ onUnmounted(() => {
 })
 </script>
 <template>
-    <div
+    <ul
         :ref="el as any"
         class="menu absolute z-10 w-60 rounded-box bg-base-200 transition-opacity"
         :class="{ 'opacity-0': props.game === undefined }"
@@ -45,7 +45,7 @@ onUnmounted(() => {
             :class="`bg-${item.color}&quot; text-${item.color}-content flex flex-row items-center gap-5 rounded`"
         >
             <Icon :icon="item.icon" />
-            {item.name}
+            {{ item.name }}
         </li>
-    </div>
+    </ul>
 </template>
