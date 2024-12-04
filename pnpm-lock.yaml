@@ -26,6 +26,9 @@ importers:
       mitt:
         specifier: ^3.0.1
         version: 3.0.1
+      primeflex:
+        specifier: ^3.3.1
+        version: 3.3.1
       primevue:
         specifier: ^4.2.4
         version: 4.2.4(vue@3.5.13(typescript@5.6.3))
@@ -634,6 +637,9 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
+  primeflex@3.3.1:
+    resolution: {integrity: sha512-zaOq3YvcOYytbAmKv3zYc+0VNS9Wg5d37dfxZnveKBFPr7vEIwfV5ydrpiouTft8MVW6qNjfkaQphHSnvgQbpQ==}
+
   primevue@4.2.4:
     resolution: {integrity: sha512-aMQymoO489isReSF/bScypswOnLBU29qkeTulGj3Wntb9plvzTIWjA4+iyDOsyxGmV5GVIvD+DuTw5FNCDWgSw==}
     engines: {node: '>=12.11.0'}
@@ -1207,6 +1213,8 @@ snapshots:
       source-map-js: 1.2.1
 
   prettier@3.3.3: {}
+
+  primeflex@3.3.1: {}
 
   primevue@4.2.4(vue@3.5.13(typescript@5.6.3)):
     dependencies:

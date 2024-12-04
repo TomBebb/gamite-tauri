@@ -7,6 +7,7 @@ import router from "./router"
 import PrimeVue from "primevue/config"
 import Aura from "@primevue/themes/aura"
 import Tooltip from "primevue/tooltip"
+import "primeflex/primeflex.css"
 
 const w = window.getCurrentWindow()
 await w.setDecorations(false)
