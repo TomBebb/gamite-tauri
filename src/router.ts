@@ -12,13 +12,13 @@ export const routes: (RouteRecordSingleView & {
         path: "/",
         component: () => import("./views/LibraryView.vue"),
         name: "Library",
-        icon: "mdi:books",
+        icon: "books",
     },
     {
         path: "/settings",
         component: () => import("./views/SettingsView.vue"),
         name: "Settings",
-        icon: "mdi:cog",
+        icon: "cog",
     },
 ]
 

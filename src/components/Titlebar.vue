@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { window } from "@tauri-apps/api"
 import { ref } from "vue"
-import { Icon } from "@iconify/vue"
+import { VaButton, VaNavbar, VaNavbarItem } from "vuestic-ui"
 
 const main = window.getCurrentWindow()
 const maximized = ref(false)
@@ -12,37 +12,33 @@ function toggleMaximize() {
 }
 </script>
 <template>
-    <div
+    <VaNavbar
+        color="primary"
         class="flex h-10 flex-row items-center gap-2 bg-gray-100 px-1"
         @dblclick="toggleMaximize"
     >
-        <div
-            class="flex-1 bg-gray-100"
-            @mousedown="
-                (ev) => {
-                    if (ev.buttons === 1 && ev.detail === 1) {
-                        main.startDragging().catch(console.error)
-                    }
-                }
-            "
-        />
-        <button class="btn btn-accent btn-sm" @click="toggleMaximize">
-            <Icon
-                size="2"
-                :icon="`mdi:window-${maximized ? 'restore' : 'maximize'}`"
+        <template #center>
+            <VaNavbarItem class="title"> TODO </VaNavbarItem>
+        </template>
+        <template #right>
+            <VaButton
+                :icon="`window-${maximized ? 'restore' : 'maximize'}`"
+                @click="toggleMaximize"
             />
-        </button>
-        <button
-            class="btn btn-warning btn-sm"
-            @click="main.minimize().catch(console.error)"
-        >
-            <Icon icon="mdi:window-minimize" />
-        </button>
-        <button
-            class="btn btn-error btn-sm"
-            @click="main.close().catch(console.error)"
-        >
-            <Icon icon="mdi:window-close" />
-        </button>
-    </div>
+            <VaButton
+                icon="window-minimize"
+                @click="main.minimize().catch(console.error)"
+            />
+            <VaButton
+                icon="window-close"
+                @click="main.close().catch(console.error)"
+            />
+        </template>
+    </VaNavbar>
 </template>
+<style scoped>
+.title {
+    font-weight: bold;
+    font-size: 2em;
+}
+</style>

@@ -1,4 +1,13 @@
 @import"https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;1,700&display=swap";@import"https://fonts.googleapis.com/icon?family=Material+Icons";
+.flex {
+    display: flex;
+}
+.flex-1 {
+    flex: 1;
+}
+.flex-row {
+    flex-direction: row;
+}
 .show-on-big-screen {
     display: none;
 }

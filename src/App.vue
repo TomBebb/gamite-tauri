@@ -10,7 +10,7 @@ const showDrawer = ref(false)
 <template>
     <VaLayout>
         <template #top>
-            <Titlebar class="sticky top-0 z-[100]" />
+            <Titlebar />
         </template>
 
         <template #left>
