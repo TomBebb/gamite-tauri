@@ -21,8 +21,9 @@ enableMapSet()
 render(
     () => (
         <>
-            <App />
-            <MemoryRouter explicitLinks={true}>{routes}</MemoryRouter>
+            <MemoryRouter root={App} explicitLinks={true}>
+                {routes}
+            </MemoryRouter>
         </>
     ),
     root
