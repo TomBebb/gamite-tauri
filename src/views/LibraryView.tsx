@@ -97,7 +97,7 @@ export default function () {
     const columns = 5
     return (
         <>
-            <Show when={context()}>
+            <Show when={context().pos.x !== 0}>
                 <ContextMenu {...context()!} />
             </Show>
             <select
