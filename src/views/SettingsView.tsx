@@ -1,70 +1,102 @@
+import { JSXElement } from "solid-js"
+import { Icon } from "@iconify-icon/solid"
+
+function Form({ children }: { children: JSXElement }) {
+    return (
+        <div class="border-accent grid w-full grid-flow-row grid-cols-[120px_auto] items-center gap-3 border-1">
+            {children}
+        </div>
+    )
+}
+function FormItem({
+    label,
+    children,
+}: {
+    label: JSXElement | string
+    children: JSXElement
+}): JSXElement {
+    return (
+        <>
+            <div class="text-right font-bold">{label}</div>
+            {children}
+        </>
+    )
+}
 export default function () {
     return (
         <div class="tabs-lift tabs">
             <label class="tab">
-                <input type="radio" name="my_tabs_4" />
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="me-2 size-4"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 0 1 0 1.972l-11.54 6.347a1.125 1.125 0 0 1-1.667-.986V5.653Z"
-                    />
-                </svg>
-                Live
+                <input
+                    type="radio"
+                    name="tabs"
+                    checked={true}
+                    aria-label="General"
+                />
+                <Icon icon="mdi:wrench" />
+                General
             </label>
             <div class="tab-content border-base-300 bg-base-100 p-6">
-                Tab content 1
+                <Form>
+                    <FormItem label="After game launch">
+                        <select class="select">
+                            <option value="minimize">Minimize</option>
+                            <option value="close">Close</option>
+                            <option value="none">Do Nothing</option>
+                        </select>
+                    </FormItem>
+                    <FormItem label="Show system tray icon">
+                        <input class="input" type="radio" />
+                    </FormItem>
+                    <FormItem label="Minimize to system tray">
+                        <input class="input" type="radio" />
+                    </FormItem>
+                    <FormItem label="Minimize to system tray on close">
+                        <input class="input" type="radio" />
+                    </FormItem>
+                </Form>
             </div>
 
             <label class="tab">
-                <input type="radio" name="my_tabs_4" checked={true} />
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="me-2 size-4"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z"
-                    />
-                </svg>
-                Laugh
+                <input type="radio" name="tabs" aria-label="Appearance" />
+                <Icon icon="mdi:eye" />
+                Appearance
             </label>
             <div class="tab-content border-base-300 bg-base-100 p-6">
                 Tab content 2
             </div>
 
             <label class="tab">
-                <input type="radio" name="my_tabs_4" />
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke-width="1.5"
-                    stroke="currentColor"
-                    class="me-2 size-4"
-                >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
-                    />
-                </svg>
-                Love
+                <input type="radio" name="tabs" aria-label="Metadata" />
+                <Icon icon="mdi:database" />
+                Metadata
             </label>
             <div class="tab-content border-base-300 bg-base-100 p-6">
-                Tab content 3
+                <Form>
+                    <FormItem label="Download games metadata after scan">
+                        <input class="input" type="radio" />
+                    </FormItem>
+                </Form>
+            </div>
+            <label class="tab">
+                <input type="radio" name="tabs" aria-label="Achievements" />
+                <Icon icon="mdi:trophy" />
+                Achievements
+            </label>
+            <div class="tab-content border-base-300 bg-base-100 p-6">
+                <Form>
+                    <FormItem label="Display achievements">
+                        <input class="input" type="radio" />
+                    </FormItem>
+                    <FormItem label="Synchronize achievements after library scan">
+                        <input class="input" type="radio" />
+                    </FormItem>
+                    <FormItem label="Synchronize achievements progress on start">
+                        <input class="input" type="radio" />
+                    </FormItem>
+                    <FormItem label="Synchronize achievements progress of installed games only">
+                        <input class="input" type="radio" />
+                    </FormItem>
+                </Form>
             </div>
         </div>
     )
