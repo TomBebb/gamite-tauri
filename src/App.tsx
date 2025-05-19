@@ -1,9 +1,9 @@
 import "./index.css"
 import NavMenu from "./components/NavMenu.js"
-import { Route } from "@solidjs/router"
 import Titlebar from "./components/Titlebar"
+import { RouteSectionProps } from "@solidjs/router"
 
-export default function () {
+export default function ({ children }: RouteSectionProps) {
     return (
         <>
             <Titlebar />
@@ -16,8 +16,7 @@ export default function () {
                     >
                         Open drawer
                     </label>
-                    <div>Demo</div>
-                    <Route />
+                    {children}
                 </div>
                 <div class="drawer-side">
                     <label
