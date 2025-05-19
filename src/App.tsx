@@ -5,28 +5,12 @@ import { RouteSectionProps } from "@solidjs/router"
 
 export default function ({ children }: RouteSectionProps) {
     return (
-        <>
-            <Titlebar />
-            <div class="drawer drawer-open">
-                <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
-                <div class="drawer-content flex flex-col items-center justify-center">
-                    <label
-                        for="my-drawer-2"
-                        class="btn btn-primary drawer-button lg:hidden"
-                    >
-                        Open drawer
-                    </label>
-                    {children}
-                </div>
-                <div class="drawer-side">
-                    <label
-                        for="my-drawer-2"
-                        aria-label="close sidebar"
-                        class="drawer-overlay"
-                    ></label>
-                    <NavMenu />
-                </div>
+        <div class="flex flex-col">
+            <Titlebar class="sticky top-0" />
+            <div class="flex flex-row">
+                <NavMenu class="min-w-20px flex-1" />
+                <div class="flex-5">{children}</div>
             </div>
-        </>
+        </div>
     )
 }

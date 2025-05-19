@@ -2,7 +2,7 @@ import { window } from "@tauri-apps/api"
 import { Icon } from "@iconify-icon/solid"
 import { createSignal } from "solid-js"
 
-export default function () {
+export default function (props: { class: string }) {
     const main = window.getCurrentWindow()
     const [maximized, setMaximized] = createSignal(false)
 
@@ -13,7 +13,10 @@ export default function () {
     }
 
     return (
-        <div class="flex flex-row gap-2" onDblClick={toggleMaximize}>
+        <div
+            class={"flex flex-row gap-2" + props.class}
+            onDblClick={toggleMaximize}
+        >
             <div
                 class="flex-1"
                 onMouseDown={(ev) => {

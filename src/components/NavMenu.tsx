@@ -3,13 +3,13 @@ import { createEffect, For } from "solid-js"
 import { Icon } from "@iconify-icon/solid"
 import { A, useLocation } from "@solidjs/router"
 
-export default function () {
+export default function (props: { class: string }) {
     const location = useLocation()
     createEffect(() => {
         console.log("location", location.pathname)
     })
     return (
-        <ul class="menu menu-md rounded-box bg-base-200 w-56">
+        <ul class={"menu menu-md rounded-box bg-base-200 " + props.class}>
             <For each={routes}>
                 {(route) => (
                     <li>
