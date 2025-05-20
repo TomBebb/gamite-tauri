@@ -17,13 +17,9 @@
     "core:window:allow-start-dragging",
     "core:window:allow-toggle-maximize",
     "fs:read-all",
-    {
-      "identifier": "fs:allow-read-file",
-      "allow": [
-        {
-          "path": "$APPDATA/**/*"
-        }
-      ]
-    }
+    "fs:allow-appdata-meta-recursive",
+    "fs:allow-appdata-read-recursive",
+    "fs:allow-appdata-write-recursive",
+    "fs:default"
   ]
 }

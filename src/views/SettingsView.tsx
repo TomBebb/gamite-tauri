@@ -1,5 +1,7 @@
 import { JSXElement } from "solid-js"
 import { Icon } from "@iconify-icon/solid"
+import { settings, setSettings } from "../common/settings"
+import { Settings } from "../common/models"
 
 function Form({ children }: { children: JSXElement }) {
     return (
@@ -8,6 +10,7 @@ function Form({ children }: { children: JSXElement }) {
         </div>
     )
 }
+
 function FormItem({
     label,
     children,
@@ -22,6 +25,49 @@ function FormItem({
         </>
     )
 }
+
+function FormCheckBoxItem({
+    label,
+    value,
+    onChange,
+}: {
+    label: JSXElement | string
+    value?: boolean
+    onChange?: (v: boolean) => void
+}): JSXElement {
+    return (
+        <>
+            <div class="text-right font-bold">{label}</div>
+            <input
+                type="checkbox"
+                class="checkbox ml-auto"
+                checked={value}
+                onChange={(ev) => onChange?.(ev.target.checked)}
+            />
+        </>
+    )
+}
+
+function FormCheckBoxItemValue<
+    TKey1 extends keyof Settings,
+    TKey2 extends keyof Settings[TKey1],
+>({ label, key1, key2 }: { label: string; key1: TKey1; key2: TKey2 }) {
+    return FormCheckBoxItem({
+        label,
+        value: settings()[key1][key2] as boolean,
+        onChange: (v: boolean) => {
+            const s = settings()
+            setSettings({
+                ...s,
+                [key1]: {
+                    ...s[key1],
+                    [key2]: v,
+                },
+            })
+        },
+    })
+}
+
 export default function () {
     return (
         <div class="tabs-lift tabs">
@@ -44,9 +90,11 @@ export default function () {
                             <option value="none">Do Nothing</option>
                         </select>
                     </FormItem>
-                    <FormItem label="Show system tray icon">
-                        <input class="input" type="radio" />
-                    </FormItem>
+                    <FormCheckBoxItemValue
+                        label="Show system tray icon"
+                        key1="general"
+                        key2="showSystemTray"
+                    />
                     <FormItem label="Minimize to system tray">
                         <input class="input" type="radio" />
                     </FormItem>
