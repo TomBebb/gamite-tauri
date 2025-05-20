@@ -22,7 +22,7 @@ render(
     () => (
         <>
             <MemoryRouter root={App} explicitLinks={true}>
-                {routes}
+                {routes()}
             </MemoryRouter>
         </>
     ),

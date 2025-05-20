@@ -10,7 +10,7 @@ export default function (props: { class: string }) {
     })
     return (
         <ul class={"menu menu-md rounded-box bg-base-200 " + props.class}>
-            <For each={routes}>
+            <For each={routes()}>
                 {(route) => (
                     <li>
                         <A
