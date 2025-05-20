@@ -1,7 +1,7 @@
 import { JSXElement } from "solid-js"
 import { Icon } from "@iconify-icon/solid"
 import { settings, setSettings } from "../common/settings"
-import { Settings } from "../common/models"
+import { PostGameLaunchAction, Settings } from "../common/models"
 
 function Form({ children }: { children: JSXElement }) {
     return (
@@ -84,10 +84,30 @@ export default function () {
             <div class="tab-content border-base-300 bg-base-100 p-6">
                 <Form>
                     <FormItem label="After game launch">
-                        <select class="select">
-                            <option value="minimize">Minimize</option>
-                            <option value="close">Close</option>
-                            <option value="none">Do Nothing</option>
+                        <select
+                            class="select"
+                            value={settings().general.postGameLaunch}
+                            onChange={(ev) => {
+                                const v = settings()
+                                setSettings({
+                                    ...v,
+                                    general: {
+                                        ...v.general,
+                                        postGameLaunch: ev.target
+                                            .value as unknown as PostGameLaunchAction,
+                                    },
+                                })
+                            }}
+                        >
+                            <option value={PostGameLaunchAction.Minimize}>
+                                Minimize
+                            </option>
+                            <option value={PostGameLaunchAction.Close}>
+                                Close
+                            </option>
+                            <option value={PostGameLaunchAction.DoNothing}>
+                                Do Nothing
+                            </option>
                         </select>
                     </FormItem>
                     <FormCheckBoxItemValue
@@ -95,12 +115,16 @@ export default function () {
                         key1="general"
                         key2="showSystemTray"
                     />
-                    <FormItem label="Minimize to system tray">
-                        <input class="input" type="radio" />
-                    </FormItem>
-                    <FormItem label="Minimize to system tray on close">
-                        <input class="input" type="radio" />
-                    </FormItem>
+                    <FormCheckBoxItemValue
+                        label="Minmize to system tray"
+                        key1="general"
+                        key2="minimizeToSystemTray"
+                    />
+                    <FormCheckBoxItemValue
+                        label="Minmize to system tray on close"
+                        key1="general"
+                        key2="minimizeToSystemTrayOnClose"
+                    />
                 </Form>
             </div>
 
@@ -120,9 +144,11 @@ export default function () {
             </label>
             <div class="tab-content border-base-300 bg-base-100 p-6">
                 <Form>
-                    <FormItem label="Download games metadata after scan">
-                        <input class="input" type="radio" />
-                    </FormItem>
+                    <FormCheckBoxItemValue
+                        label="Download games metadata after scan"
+                        key1="metadata"
+                        key2="downloadGamesMetadataAfterScan"
+                    />
                 </Form>
             </div>
             <label class="tab">
@@ -132,18 +158,26 @@ export default function () {
             </label>
             <div class="tab-content border-base-300 bg-base-100 p-6">
                 <Form>
-                    <FormItem label="Display achievements">
-                        <input class="input" type="radio" />
-                    </FormItem>
-                    <FormItem label="Synchronize achievements after library scan">
-                        <input class="input" type="radio" />
-                    </FormItem>
-                    <FormItem label="Synchronize achievements progress on start">
-                        <input class="input" type="radio" />
-                    </FormItem>
-                    <FormItem label="Synchronize achievements progress of installed games only">
-                        <input class="input" type="radio" />
-                    </FormItem>
+                    <FormCheckBoxItemValue
+                        label="Display achievements"
+                        key1="achievements"
+                        key2="display"
+                    />
+                    <FormCheckBoxItemValue
+                        label="Synchronize achievements after library scan"
+                        key1="achievements"
+                        key2="scanAfterLibraryScan"
+                    />
+                    <FormCheckBoxItemValue
+                        label="Synchronize achievements progress on start"
+                        key1="achievements"
+                        key2="syncProgressOnStart"
+                    />
+                    <FormCheckBoxItemValue
+                        label="Synchronize achievements progress of installed games only"
+                        key1="achievements"
+                        key2="syncProgressOfInstalledGamesOnly"
+                    />
                 </Form>
             </div>
         </div>
