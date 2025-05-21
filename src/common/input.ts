@@ -6,11 +6,13 @@ import { createEffect, createSignal } from "solid-js"
 import * as logger from "@tauri-apps/plugin-log"
 
 export const enum MappedButton {
-    Down = "down",
-    Up = "up",
-    Right = "right",
-    Left = "left",
-    Confirm = "confirm",
+    Down,
+    Up,
+    Right,
+    Left,
+    Confirm,
+    Back,
+    ShowMenu,
 }
 
 export type InputEvents = {

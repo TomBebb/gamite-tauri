@@ -1,9 +1,62 @@
-// Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
+use crate::db::{game, AppDbState};
+use gamite_core::GameData;
+use gilrs::{Button, EventType};
+use log::LevelFilter;
+use sea_orm::EntityTrait;
+use serde::{Deserialize, Serialize};
+use std::sync::atomic::{AtomicBool, Ordering};
+use tauri::tray::{MouseButton, MouseButtonState, TrayIconEvent};
+use tauri::{
+    menu::{Menu, MenuItem},
+    tray::TrayIconBuilder,
+    AppHandle, Emitter, Manager,
+};
+use tokio::runtime::Builder;
+
 #[tauri::command]
 fn greet(name: &str) -> String {
     format!("Hello, {}! You've been greeted from Rust!", name)
 }
+#[derive(Deserialize, Serialize, Copy, Clone, Debug)]
+enum MappedButton {
+    Down,
+    Up,
+    Right,
+    Left,
+    Confirm,
+    Back,
+    ShowMenu,
+}
 
+static RUN_GAMEPAD_PROC: AtomicBool = AtomicBool::new(false);
+
+#[tauri::command]
+fn listen_gamepad_input(app: AppHandle) {
+    RUN_GAMEPAD_PROC.store(true, Ordering::Relaxed);
+
+    tokio::task::spawn_blocking(move || {
+        log::debug!("RUN_GAMEPAD_PROC");
+        let handle_btn = |btn: MappedButton| app.emit("on-input", btn).unwrap();
+
+        let mut client = gilrs::Gilrs::new().unwrap();
+        while let Some(gilrs::Event { id, event, .. }) = client.next_event() {
+            log::debug!("Gamepad event: {} {:?}", id, event);
+            match event {
+                EventType::ButtonPressed(Button::DPadLeft, _) => handle_btn(MappedButton::Left),
+                EventType::ButtonPressed(Button::DPadRight, _) => handle_btn(MappedButton::Right),
+                EventType::ButtonPressed(Button::DPadUp, _) => handle_btn(MappedButton::Up),
+                EventType::ButtonPressed(Button::DPadDown, _) => handle_btn(MappedButton::Down),
+                EventType::ButtonPressed(Button::Start, _) => handle_btn(MappedButton::ShowMenu),
+                EventType::ButtonPressed(Button::South, _) => handle_btn(MappedButton::Confirm),
+                ev => log::debug!("Unhandled event {:?}", ev),
+            }
+        }
+    });
+}
+#[tauri::command]
+async fn cancel_gamepad_input() {
+    RUN_GAMEPAD_PROC.store(false, Ordering::Relaxed);
+}
 #[tauri::command]
 async fn get_games(db_state: tauri::State<'_, AppDbState>) -> Result<Vec<GameData>, String> {
     log::info!("Getting games");
@@ -14,17 +67,6 @@ async fn get_games(db_state: tauri::State<'_, AppDbState>) -> Result<Vec<GameDat
     Ok(raw.into_iter().map(Into::into).collect())
 }
 
-use crate::db::{game, AppDbState};
-use gamite_core::GameData;
-use log::LevelFilter;
-use sea_orm::EntityTrait;
-use tauri::tray::{MouseButton, MouseButtonState, TrayIconEvent};
-use tauri::{
-    menu::{Menu, MenuItem},
-    tray::TrayIconBuilder,
-    AppHandle, Emitter, Manager,
-};
-use tokio::runtime::Builder;
 mod db;
 
 fn restore(app: &AppHandle) -> tauri::Result<()> {
@@ -51,8 +93,12 @@ pub fn run() {
         .plugin(tauri_plugin_cli::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())
-        .plugin(tauri_plugin_gamepad::init())
-        .invoke_handler(tauri::generate_handler![greet, get_games])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            get_games,
+            listen_gamepad_input,
+            cancel_gamepad_input
+        ])
         .build(tauri::generate_context!())
         .expect("error while running tauri application");
 
