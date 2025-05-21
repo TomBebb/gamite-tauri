@@ -1,15 +1,33 @@
 import { window } from "@tauri-apps/api"
 import { Icon } from "@iconify-icon/solid"
-import { createSignal } from "solid-js"
+import { createMemo, createSignal } from "solid-js"
+import { settings } from "../common/settings"
 
 export default function (props: { class: string }) {
+    const general = createMemo(() => settings().general)
     const main = window.getCurrentWindow()
+
+    main.onCloseRequested(() => {
+        if (general().minimizeToSystemTrayOnClose) {
+            main.hide().catch(console.error)
+        }
+    }).catch(console.error)
+
     const [maximized, setMaximized] = createSignal(false)
 
     function toggleMaximize() {
         main.toggleMaximize()
             .then((_) => setMaximized(!maximized()))
             .catch(console.error)
+    }
+
+    async function minimize() {
+        const minimized = await main.isMinimized()
+        if (general().minimizeToSystemTray && !minimized) {
+            await main.hide()
+        } else {
+            await main.minimize()
+        }
     }
 
     return (
@@ -34,7 +52,7 @@ export default function (props: { class: string }) {
             </button>
             <button
                 class="btn btn-warning btn-sm"
-                on:click={() => main.minimize().catch(console.error)}
+                on:click={() => minimize().catch(console.error)}
             >
                 <Icon icon="mdi:window-minimize" />
             </button>
