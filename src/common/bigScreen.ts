@@ -1,8 +1,12 @@
 import { getCurrentWindow } from "@tauri-apps/api/window"
 import { createEffect, createMemo, createSignal } from "solid-js"
 import { getMatches } from "@tauri-apps/plugin-cli"
+import { listen } from "@tauri-apps/api/event"
 
 export const [isBigScreen, setBigScreen] = createSignal<boolean>(false)
+listen<void>("toggle-bigscreen", (_) => setBigScreen(!isBigScreen())).catch(
+    console.error
+)
 
 enum Mode {
     BigScreen = "bigscreen",
