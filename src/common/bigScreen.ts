@@ -1,7 +1,8 @@
 import { getCurrentWindow } from "@tauri-apps/api/window"
-import { createEffect, createSignal } from "solid-js"
+import { createEffect, createMemo, createSignal } from "solid-js"
 
 export const [isBigScreen, setBigScreen] = createSignal<boolean>(false)
+export const isDesktop = createMemo(() => !isBigScreen(), false)
 createEffect(() => {
     getCurrentWindow().setFullscreen(isBigScreen()).catch(console.error)
 })
@@ -13,5 +14,6 @@ window.addEventListener("keydown", (event: KeyboardEvent) => {
     console.debug(event.code)
     if (event.code === "F11") {
         setBigScreen(!isBigScreen())
+        console.info("big screen toggle", isBigScreen())
     }
 })
