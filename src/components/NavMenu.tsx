@@ -1,12 +1,9 @@
 import { routes } from "../router"
-import { createEffect, For } from "solid-js"
+import { For } from "solid-js"
 import { A, useLocation } from "@solidjs/router"
 
 export default function (props: { class: string }) {
     const location = useLocation()
-    createEffect(() => {
-        console.log("location", location.pathname)
-    })
     return (
         <ul class={"menu menu-md rounded-box bg-base-200 " + props.class}>
             <For each={routes()}>

@@ -6,6 +6,8 @@ import { createEffect, createSignal, For, onMount, Show } from "solid-js"
 import ContextMenu, { ContextMenuProps } from "../components/ContextMenu"
 import UrlImage from "../components/UrlImage"
 
+import * as logger from "@tauri-apps/plugin-log"
+
 type View = "grid" | "table" | "list"
 const views: { name: string; value: View }[] = [
     { name: "Grid View", value: "grid" },
@@ -16,7 +18,7 @@ export default function () {
     const [games, setGames] = createSignal<GameData[]>([])
     let clearGame: () => void
     clearGame = () => {
-        console.log("clear game")
+        logger.info("clear game").catch(console.error)
         setContext({ game: undefined, pos: context().pos, clearGame })
     }
 
@@ -31,7 +33,7 @@ export default function () {
     onMount(() => {
         invoke<GameData[]>("get_games")
             .then((gs) => {
-                console.info("got games", gs)
+                logger.info(`got ${gs.length} games`).catch(console.error)
                 setGames(gs.map((g) => ({ ...g, genres: [] })))
             })
             .catch(console.error)
@@ -51,7 +53,7 @@ export default function () {
     }
 
     function gridMovementHandler(btn: MappedButton) {
-        console.info("gridMovementHandler", btn)
+        logger.info("gridMovementHandler " + btn).catch(console.error)
         switch (btn) {
             case MappedButton.Up:
                 if (selectedGameIndex() - columns > 0)
@@ -83,12 +85,13 @@ export default function () {
     }
 
     function showContextMenu(game: GameData, ev: MouseEvent) {
-        console.info("context click", { game, ev })
+        logger
+            .debug(`context click ${game.name} ${ev.x}, ${ev.y}`)
+            .catch(console.error)
         ev.preventDefault()
         ev.stopPropagation()
         setContext({ game, pos: { x: ev.x, y: ev.y }, clearGame })
 
-        console.log(ev.x, ev.y)
         return false
     }
 

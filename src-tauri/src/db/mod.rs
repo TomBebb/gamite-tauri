@@ -7,11 +7,11 @@ use tokio::fs;
 
 pub struct AppDbState(pub DatabaseConnection);
 pub async fn init(app: &App) -> DatabaseConnection {
-    println!("initializing database");
+    log::debug!("initializing database");
     let mut path = app.path().app_data_dir().expect("could not get data_dir");
     fs::create_dir_all(&path).await.unwrap();
     path.push("db.sqlite");
-    println!("initializing database @ {:?}", path);
+    log::debug!("initializing database @ {:?}", path);
     let needs_init = !path.is_file();
 
     let mut opts = ConnectOptions::new(format!("sqlite:{}?mode=rwc", path.to_string_lossy()));

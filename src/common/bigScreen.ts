@@ -2,10 +2,11 @@ import { getCurrentWindow } from "@tauri-apps/api/window"
 import { createEffect, createMemo, createSignal } from "solid-js"
 import { getMatches } from "@tauri-apps/plugin-cli"
 import { listen } from "@tauri-apps/api/event"
+import * as logger from "@tauri-apps/plugin-log"
 
 export const [isBigScreen, setBigScreen] = createSignal<boolean>(false)
 listen<void>("toggle-bigscreen", (_) => setBigScreen(!isBigScreen())).catch(
-    console.error
+    logger.error
 )
 
 enum Mode {
@@ -29,9 +30,9 @@ createEffect(() => {
     else document.body.classList.remove("big-screen")
 })
 window.addEventListener("keydown", (event: KeyboardEvent) => {
-    console.debug(event.code)
+    logger.debug(`${event.code}`).catch(console.error)
     if (event.code === "F11") {
         setBigScreen(!isBigScreen())
-        console.info("big screen toggle", isBigScreen())
+        logger.info(`big screen toggle ${isBigScreen()}`).catch(console.error)
     }
 })
