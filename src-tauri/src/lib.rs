@@ -15,8 +15,8 @@ async fn get_games(db_state: tauri::State<'_, AppDbState>) -> Result<Vec<GameDat
 }
 
 use crate::db::{game, AppDbState};
-use env_logger::Env;
 use gamite_core::GameData;
+use log::LevelFilter;
 use sea_orm::EntityTrait;
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconEvent};
 use tauri::{
@@ -37,7 +37,17 @@ fn restore(app: &AppHandle) -> tauri::Result<()> {
 }
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    let level: LevelFilter = if cfg!(debug_assertions) {
+        LevelFilter::Debug
+    } else {
+        LevelFilter::Info
+    };
     let app = tauri::Builder::default()
+        .plugin(
+            tauri_plugin_log::Builder::new()
+                .level_for("gamite", level)
+                .build(),
+        )
         .plugin(tauri_plugin_cli::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())
@@ -89,7 +99,6 @@ pub fn run() {
         })
         .build(&app)
         .unwrap();
-    env_logger::Builder::from_env(Env::default().default_filter_or("info")).init();
     let runtime = Builder::new_multi_thread().enable_all().build().unwrap();
     runtime.block_on(async {
         let db = db::init(&app).await;

@@ -1,6 +1,7 @@
 import { GameData, GameInstallStatus } from "../common/models"
 import { createMemo, For, onCleanup, onMount } from "solid-js"
 import { getActionData, getGameActions } from "../common/gameActions"
+import * as logger from "@tauri-apps/plugin-log"
 
 export interface ContextMenuProps {
     game?: GameData
@@ -20,7 +21,7 @@ export default function ContextMenu(props: ContextMenuProps) {
 
     const handleClick = (event: MouseEvent) => {
         if (!ref.contains(event.target as Node) && props.game) {
-            console.log("click outside")
+            logger.info("click outside").catch(console.error)
             props.clearGame()
         }
     }

@@ -8,6 +8,8 @@ import {
 } from "./bigScreen"
 import { createEffect, createSignal } from "solid-js"
 
+import * as logger from "@tauri-apps/plugin-log"
+
 export const enum MappedButton {
     Down = "down",
     Up = "up",
@@ -26,6 +28,13 @@ export const [currButtons, setCurrButtons] = createSignal<Set<MappedButton>>(
     new Set()
 )
 
+const keyMappings = new Map<string, MappedButton>([
+    ["ArrowDown", MappedButton.Down],
+    ["ArrowUp", MappedButton.Up],
+    ["ArrowLeft", MappedButton.Left],
+    ["ArrowRight", MappedButton.Right],
+    ["Enter", MappedButton.Confirm],
+])
 inputEmitter.on("pressed", (btn) => {
     if (btn === MappedButton.ShowNav) {
         setFocusedItem(
@@ -44,37 +53,17 @@ inputEmitter.on("released", (btn) =>
     )
 )
 
-function mapKey(event: KeyboardEvent): null | MappedButton {
-    switch (event.key) {
-        case "ArrowDown":
-            return MappedButton.Down
-        case "ArrowUp":
-            return MappedButton.Up
-        case "ArrowLeft":
-            return MappedButton.Left
-        case "ArrowRight":
-            return MappedButton.Right
-        case "Enter":
-            return MappedButton.Confirm
-        case "Escape":
-            return MappedButton.ShowNav
-        default:
-            return null
-    }
-}
-
 function onKeyDown(event: KeyboardEvent) {
-    const mapped = mapKey(event)
-    console.debug("keyUp", { mapped, raw: event.key })
+    const mapped = keyMappings.get(event.key)
+    logger.debug(`keyDown ${event.key} => ${mapped}`).catch(console.error)
     if (mapped) inputEmitter.emit("pressed", mapped)
 }
 
 function onKeyUp(event: KeyboardEvent) {
-    const mapped = mapKey(event)
-    console.debug("keyUp", { mapped, raw: event.key })
+    const mapped = keyMappings.get(event.key)
+    logger.debug(`keyUp ${event.key} => ${mapped}`).catch(console.error)
     if (mapped) inputEmitter.emit("released", mapped)
 }
-
 const gamepads: Gamepad[] = []
 window.addEventListener("gamepadconnected", (event: GamepadEvent) => {
     console.info("gamepadconnected", event)
@@ -85,12 +74,10 @@ window.addEventListener("gamepaddisconnected", (event: GamepadEvent) => {
     console.info("gamepaddisconnected", event)
     gamepads.splice(gamepads.indexOf(event.gamepad), 1)
 })
-
 interface IndexedMappedButton {
     index: number
     mapped: MappedButton
 }
-
 const gpButtonIndices: IndexedMappedButton[] = [
     {
         index: 0,
@@ -114,7 +101,6 @@ const gpButtonIndices: IndexedMappedButton[] = [
     },
 ]
 const deadzone = 0.1
-
 function setGamepadInterval(): number {
     console.debug("setGamepadInterval", { gamepadInterval })
     return setInterval(() => {
@@ -145,12 +131,11 @@ function setGamepadInterval(): number {
         }
     }, 1000 / 100)
 }
-
 let gamepadInterval: number
 
 createEffect(() => {
     const bs = isBigScreen()
-    console.debug("isBigScreen", bs)
+    logger.debug(`isBigScreen: ${bs}`).catch(console.error)
     if (bs) {
         gamepadInterval = setGamepadInterval()
         window.addEventListener("keydown", onKeyDown)
