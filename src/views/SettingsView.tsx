@@ -5,7 +5,7 @@ import { PostGameLaunchAction, Settings } from "../common/models"
 
 function Form({ children }: { children: JSXElement }) {
     return (
-        <div class="border-accent grid w-full grid-flow-row grid-cols-[120px_auto] items-center gap-3 border-1">
+        <div class="grid w-full grid-flow-row grid-cols-[minmax(120px,4fr)_2fr] items-center gap-3">
             {children}
         </div>
     )
@@ -31,20 +31,23 @@ function FormCheckBoxItem({
     value,
     onChange,
 }: {
-    label: JSXElement | string
-    value?: boolean
-    onChange?: (v: boolean) => void
+    label: string
+    value: boolean
+    onChange: (v: boolean) => void
 }): JSXElement {
     return (
-        <>
-            <div class="text-right font-bold">{label}</div>
-            <input
-                type="checkbox"
-                class="checkbox ml-auto"
-                checked={value}
-                onChange={(ev) => onChange?.(ev.target.checked)}
-            />
-        </>
+        <label class="col-span-2">
+            <Form>
+                <FormItem label={label}>
+                    <input
+                        type="checkbox"
+                        class="checkbox ml-auto"
+                        checked={value}
+                        onInput={(ev) => onChange(ev.target.checked)}
+                    />
+                </FormItem>
+            </Form>
+        </label>
     )
 }
 
