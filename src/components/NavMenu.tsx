@@ -61,7 +61,12 @@ export default function (props: { class?: string }) {
                                     bigScreenIndex() === index(),
                             }}
                         >
-                            <div class="flex flex-row items-center justify-start gap-2">
+                            <div
+                                class="flex flex-row items-center justify-start gap-2"
+                                classList={{
+                                    "gap-5 p-2": isBigScreen(),
+                                }}
+                            >
                                 {route.icon}
                                 {route.name}
                             </div>
