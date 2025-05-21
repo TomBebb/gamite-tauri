@@ -9,6 +9,7 @@ import {
     isDesktop,
     setFocusedItem,
 } from "../common/bigScreen"
+import "./NavMenu.css"
 
 export default function (props: { class?: string }) {
     const location = useLocation()
@@ -21,7 +22,6 @@ export default function (props: { class?: string }) {
     })
 
     inputEmitter.on("pressed", (ev) => {
-        console.info("focusedItem", focusedItem)
         if (focusedItem() !== FocusedItem.NavMenu) return
         console.log("Pressed " + ev)
         switch (ev) {
@@ -44,15 +44,9 @@ export default function (props: { class?: string }) {
 
     return (
         <ul
-            class={
-                "menu menu-md rounded-box bg-base-200 overflow-clip " +
-                props.class
-            }
+            class={`menu nav menu-md rounded-box bg-base-200 overflow-hidden transition-[width] ${props.class}`}
             classList={{
-                "flex-1": isDesktop(),
-                "w-0": isBigScreen() && focusedItem() !== FocusedItem.NavMenu,
-                "w-30px":
-                    isBigScreen() && focusedItem() === FocusedItem.NavMenu,
+                focused: focusedItem() === FocusedItem.NavMenu,
             }}
         >
             <For each={routes()}>

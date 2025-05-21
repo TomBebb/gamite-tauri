@@ -1,0 +1,11 @@
+body:not(.big-screen) .nav {
+    flex: 1;
+}
+
+body.big-screen .nav {
+    width: 0;
+}
+
+body.big-screen .nav.focused {
+    width: 40vw;
+}
