@@ -1,3 +1,4 @@
+#![feature(let_chains)]
 use crate::db::{game, AppDbState};
 use gamite_core::GameData;
 use gilrs::{Button, EventType};
@@ -39,7 +40,9 @@ fn listen_gamepad_input(app: AppHandle) {
         let handle_btn = |btn: MappedButton| app.emit("on-input", btn).unwrap();
 
         let mut client = gilrs::Gilrs::new().unwrap();
-        while let Some(gilrs::Event { id, event, .. }) = client.next_event() {
+        while RUN_GAMEPAD_PROC.load(Ordering::Relaxed)
+            && let Some(gilrs::Event { id, event, .. }) = client.next_event()
+        {
             log::debug!("Gamepad event: {} {:?}", id, event);
             match event {
                 EventType::ButtonPressed(Button::DPadLeft, _) => handle_btn(MappedButton::Left),
