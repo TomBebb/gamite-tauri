@@ -9,7 +9,9 @@ export const enum MappedButton {
     Right = "right",
     Left = "left",
     Confirm = "confirm",
+    ShowNav = "showNav",
 }
+
 export type InputEvents = {
     pressed: MappedButton
     released: MappedButton
@@ -29,6 +31,7 @@ inputEmitter.on("released", (btn) =>
         })
     )
 )
+
 function mapKey(event: KeyboardEvent): null | MappedButton {
     switch (event.key) {
         case "ArrowDown":
@@ -39,22 +42,27 @@ function mapKey(event: KeyboardEvent): null | MappedButton {
             return MappedButton.Left
         case "ArrowRight":
             return MappedButton.Right
-        case "space":
+        case "Space":
             return MappedButton.Confirm
+        case "Escape":
+            return MappedButton.ShowNav
         default:
             return null
     }
 }
+
 function onKeyDown(event: KeyboardEvent) {
     const mapped = mapKey(event)
     console.debug("keyUp", { mapped, raw: event.key })
     if (mapped) inputEmitter.emit("pressed", mapped)
 }
+
 function onKeyUp(event: KeyboardEvent) {
     const mapped = mapKey(event)
     console.debug("keyUp", { mapped, raw: event.key })
     if (mapped) inputEmitter.emit("released", mapped)
 }
+
 const gamepads: Gamepad[] = []
 window.addEventListener("gamepadconnected", (event: GamepadEvent) => {
     console.info("gamepadconnected", event)
@@ -65,10 +73,12 @@ window.addEventListener("gamepaddisconnected", (event: GamepadEvent) => {
     console.info("gamepaddisconnected", event)
     gamepads.splice(gamepads.indexOf(event.gamepad), 1)
 })
+
 interface IndexedMappedButton {
     index: number
     mapped: MappedButton
 }
+
 const gpButtonIndices: IndexedMappedButton[] = [
     {
         index: 0,
@@ -92,6 +102,7 @@ const gpButtonIndices: IndexedMappedButton[] = [
     },
 ]
 const deadzone = 0.1
+
 function setGamepadInterval(): number {
     console.debug("setGamepadInterval", { gamepadInterval })
     return setInterval(() => {
@@ -122,6 +133,7 @@ function setGamepadInterval(): number {
         }
     }, 1000 / 100)
 }
+
 let gamepadInterval: number
 
 createEffect(() => {
