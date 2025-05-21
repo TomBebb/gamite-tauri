@@ -22,7 +22,7 @@ use tauri::tray::{MouseButton, MouseButtonState, TrayIconEvent};
 use tauri::{
     menu::{Menu, MenuItem},
     tray::TrayIconBuilder,
-    AppHandle, Manager,
+    AppHandle, Emitter, Manager,
 };
 use tokio::runtime::Builder;
 mod db;
@@ -47,8 +47,16 @@ pub fn run() {
         .expect("error while running tauri application");
 
     let restore_i = MenuItem::with_id(&app, "restore", "Restore", true, None::<&str>).unwrap();
+    let toggle_big_screen_i = MenuItem::with_id(
+        &app,
+        "toggle_bs",
+        "Toggle big-screen mode",
+        true,
+        None::<&str>,
+    )
+    .unwrap();
     let quit_i = MenuItem::with_id(&app, "quit", "Quit", true, None::<&str>).unwrap();
-    let menu = Menu::with_items(&app, &[&restore_i, &quit_i]).unwrap();
+    let menu = Menu::with_items(&app, &[&restore_i, &toggle_big_screen_i, &quit_i]).unwrap();
 
     let tray = TrayIconBuilder::new()
         .icon(app.default_window_icon().unwrap().clone())
@@ -60,6 +68,7 @@ pub fn run() {
                 app.exit(0);
             }
             "restore" => restore(app).unwrap(),
+            "toggle_bs" => app.emit("toggle-bigscreen", ()).unwrap(),
             _ => {
                 log::debug!("menu item {:?} not handled", event.id);
             }
