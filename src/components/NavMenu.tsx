@@ -6,10 +6,11 @@ import {
     FocusedItem,
     focusedItem,
     isBigScreen,
+    isDesktop,
     setFocusedItem,
 } from "../common/bigScreen"
 
-export default function (props: { class: string }) {
+export default function (props: { class?: string }) {
     const location = useLocation()
     const navigate = useNavigate()
     const [bigScreenIndex, setBigScreenIndex] = createSignal<number>(0)
@@ -42,7 +43,18 @@ export default function (props: { class: string }) {
     })
 
     return (
-        <ul class={"menu menu-md rounded-box bg-base-200 " + props.class}>
+        <ul
+            class={
+                "menu menu-md rounded-box bg-base-200 overflow-clip " +
+                props.class
+            }
+            classList={{
+                "flex-1": isDesktop(),
+                "w-0": isBigScreen() && focusedItem() !== FocusedItem.NavMenu,
+                "w-30px":
+                    isBigScreen() && focusedItem() === FocusedItem.NavMenu,
+            }}
+        >
             <For each={routes()}>
                 {(route, index) => (
                     <li>

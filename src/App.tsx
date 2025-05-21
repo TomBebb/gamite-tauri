@@ -12,7 +12,7 @@ export default function ({ children }: RouteSectionProps) {
                 <Titlebar class="sticky top-0" />
             </Show>
             <div class="flex flex-row">
-                <NavMenu class="min-w-20px flex-1" />
+                <NavMenu />
                 <div class="flex-5">{children}</div>
             </div>
         </div>
