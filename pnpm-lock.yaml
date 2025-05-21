@@ -29,12 +29,18 @@ importers:
       immer:
         specifier: ^10.1.1
         version: 10.1.1
+      input-device-handler:
+        specifier: ^9.0.1
+        version: 9.0.1
       mitt:
         specifier: ^3.0.1
         version: 3.0.1
       solid-js:
         specifier: ^1.9.7
         version: 1.9.7
+      tauri-plugin-gamepad-api:
+        specifier: ^0.0.5
+        version: 0.0.5
     devDependencies:
       '@iconify-json/mdi':
         specifier: ^1.2.3
@@ -96,6 +102,18 @@ packages:
 
   '@antfu/utils@8.1.1':
     resolution: {integrity: sha512-Mex9nXf9vR6AhcXmMrlz/HVgYYZpVGJ6YlPgwl7UnaFpnshXs6EK/oa5Gpf3CzENMjkvEx2tQtntGnb7UtSTOQ==}
+
+  '@augment-vir/assert@31.20.0':
+    resolution: {integrity: sha512-5lliVw4LCFdLduTqD4tbf+o2kS2S02uhxm28WHlTM0tF2QiqgCk+ydpf6fRFBBidnkw5rRLKo3o7FB09ldHsOA==}
+    engines: {node: '>=22'}
+
+  '@augment-vir/common@31.20.0':
+    resolution: {integrity: sha512-Hbgoo7k132JIhq319I3iuIP57UhLXXZVYgdC3gBTh/1xdYzR1Rf+DIR7qJjbVmYgxnvFoLSDnn20Xc9n4LWJcw==}
+    engines: {node: '>=22'}
+
+  '@augment-vir/core@31.20.0':
+    resolution: {integrity: sha512-t4lzcG8PXOr0XhaGnQN8rcQGgWQ7AmIumywxnhEgYapddV2pYlt/H7QVaMJzhq/jaBiAkQ865OKo5cqI9RtxuQ==}
+    engines: {node: '>=22'}
 
   '@babel/code-frame@7.26.2':
     resolution: {integrity: sha512-RJlIHRueQgwWitWgF8OdFYGZX328Ax5BCemNGlqHfplnRT9ESi8JkFlvaVYbS+UubVY6dpv87Fs2u5M29iNFVQ==}
@@ -173,6 +191,10 @@ packages:
   '@babel/types@7.26.0':
     resolution: {integrity: sha512-Z/yiTPj+lDVnF7lWeKCIJzaIkI0vYO87dMpZ4bg4TDrFe4XXLFWL1TbXU27gBP3QccxV9mZICCrnjnYlJjXHOA==}
     engines: {node: '>=6.9.0'}
+
+  '@date-vir/duration@7.3.1':
+    resolution: {integrity: sha512-MRXg2dz021QdOYx4TRcDFJ1PhiNIr8HsZ73uFot5+yMbE0oMdqEDpetzm3PAYvSrYrC3L/qxr8+cnh6FUr+cRw==}
+    engines: {node: '>=22'}
 
   '@esbuild/aix-ppc64@0.25.4':
     resolution: {integrity: sha512-1VCICWypeQKhVbE9oW/sJaAmjLxhVqacdkvPLEjwlttjfwENRSClS8EjBz0KzRyFSCPDIkuXW34Je/vk7zdB7Q==}
@@ -713,10 +735,17 @@ packages:
   '@types/estree@1.0.7':
     resolution: {integrity: sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==}
 
+  '@types/luxon@3.6.2':
+    resolution: {integrity: sha512-R/BdP7OxEMc44l2Ex5lSXHoIXTB2JLNa3y2QISIbr58U/YcsffyQrYW//hZSdrfxrjRZj3GcUoxMPGdO8gSYuw==}
+
   acorn@8.14.1:
     resolution: {integrity: sha512-OvQ/2pUDKmgfCg++xsTX1wGxfTaszcHVcTctW4UJB4hibJx2HXxxO5UmVgyjMa+ZDsiaf5wWLXYpRWMmBI0QHg==}
     engines: {node: '>=0.4.0'}
     hasBin: true
+
+  ansi-styles@6.2.1:
+    resolution: {integrity: sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug==}
+    engines: {node: '>=12'}
 
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
@@ -737,6 +766,9 @@ packages:
     resolution: {integrity: sha512-jvlx5wDp8s+bEF9sGFw/84SInXOA51ttkUEroQziKMbxplXThVKt83qB6bDTa1HuLNatdU9FHpFOiQWs1tLQIg==}
     peerDependencies:
       '@babel/core': ^7.0.0
+
+  browser-or-node@3.0.0:
+    resolution: {integrity: sha512-iczIdVJzGEYhP5DqQxYM9Hh7Ztpqqi+CXZpSmX8ALFs9ecXkQIeqRyM6TfxEfMVpwhl3dSuDvxdzzo9sUOIVBQ==}
 
   browserslist@4.24.2:
     resolution: {integrity: sha512-ZIc+Q62revdMcqC6aChtW4jz3My3klmCO1fEmINZY/8J3EpBg5/A/D0AKmBveUh6pgoeycoMkVMko84tuYS+Gg==}
@@ -800,6 +832,10 @@ packages:
       supports-color:
         optional: true
 
+  deep-eql@5.0.2:
+    resolution: {integrity: sha512-h5k/5U50IJJFpzfL6nO9jaaumfjO/f2NjK/oYB2Djzm4p9L+3T9qWpZqZ2hAbLPuuYq9wrU08WQyBTL5GbPk5Q==}
+    engines: {node: '>=6'}
+
   detect-libc@2.0.4:
     resolution: {integrity: sha512-3UDv+G9CsCKO1WKMGw9fwq/SWJYbI0c5Y7LU1AXYoDdbhE2AHQ6N6Nb34sG8Fj7T5APy8qXDCKuuIHd1BR0tVA==}
     engines: {node: '>=8'}
@@ -829,6 +865,10 @@ packages:
   escalade@3.2.0:
     resolution: {integrity: sha512-WUj2qlxaQtO4g6Pq5c29GTcWGDyd8itL8zTlipgECz3JesAiiOKotd8JU6otB3PACgG6xkJUyVhboMS+bje/jA==}
     engines: {node: '>=6'}
+
+  expect-type@1.2.1:
+    resolution: {integrity: sha512-/kP8CAwxzLVEeFrMm4kMmy4CCDlpipyA7MYLVrdJIkV0fYF0UaigQHRsxHiuY/GEea+bh4KSv3TIlgr+2UL6bw==}
+    engines: {node: '>=12.0.0'}
 
   exsolve@1.0.5:
     resolution: {integrity: sha512-pz5dvkYYKQ1AHVrgOzBKWeP4u4FRb3a6DNK2ucr0OoNwYIU4QWsJ+NM36LLzORT+z845MzKHHhpXiUF5nvQoJg==}
@@ -873,6 +913,10 @@ packages:
   import-fresh@3.3.1:
     resolution: {integrity: sha512-TR3KfrTZTYLPB6jUjfx6MF9WcWrHL9su5TObK4ZkYgBdWKPOFoSoQIdEuTuR82pmtxH2spWG9h6etwfr1pLBqQ==}
     engines: {node: '>=6'}
+
+  input-device-handler@9.0.1:
+    resolution: {integrity: sha512-Fl09IrZGxCJtDWlFVM6gib6YGCvidqOtBiepa8QwaQlT1g3qxEMgsZHkjZSj2FbDLKLygkB6Jb+ZyeEyvH9jRA==}
+    engines: {node: '>=22'}
 
   is-arrayish@0.2.1:
     resolution: {integrity: sha512-zz06S8t0ozoDXMG+ube26zeCTNXcKIPJZJi8hBrF4idCLms4CG9QtK7qBl1boi5ODzFpjswb5JPmHCbMpjaYzg==}
@@ -984,6 +1028,10 @@ packages:
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
+
+  luxon@3.6.1:
+    resolution: {integrity: sha512-tJLxrKJhO2ukZ5z0gyjY1zPh3Rh88Ej9P7jNrZiHMUXHae1yvI2imgOZtL1TO8TW6biMMKfTtAOoEJANgtWBMQ==}
+    engines: {node: '>=12'}
 
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
@@ -1185,6 +1233,9 @@ packages:
     resolution: {integrity: sha512-5S7Va8hKfV7W5U6g3aYxXmlPoZVAwUMy9AOKyF2fVuZa2UD3qZjg578OrLRt8PcNN1PleVaL/5/yYATNL0ICUw==}
     engines: {node: '>=18'}
 
+  tauri-plugin-gamepad-api@0.0.5:
+    resolution: {integrity: sha512-WO0xwXmPr4PMe9HzljKUbTkGv7J6ur2Df/OuEPsxBeSA5QPffAJR3N32M4pM4yW72D9Vt19XplPnHHDVATVMSw==}
+
   tinyexec@1.0.1:
     resolution: {integrity: sha512-5uC6DDlmeqiOwCPmK9jMSdOuZTh8bU39Ys6yidB+UTt5hfZUPGAypSgFRiEp+jbi9qH40BLDvy85jIU88wKSqw==}
 
@@ -1194,6 +1245,14 @@ packages:
 
   tslib@2.8.1:
     resolution: {integrity: sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==}
+
+  type-fest@4.41.0:
+    resolution: {integrity: sha512-TeTSQ6H5YHvpqVwBRcnLDCBnDOHWYu7IvGbHT6N8AOymcr9PJGjc1GTtiWZTYg0NCgYwvnYWEkVChQAr9bjfwA==}
+    engines: {node: '>=16'}
+
+  typed-event-target@4.1.0:
+    resolution: {integrity: sha512-fDFhZb7ofywLsVv8mYePD6ONfCpVHyM1t2dboEJx/XMsnflljnu3GQ5qH09hS1USuypGMR7wRbdWQPydgJ8nGQ==}
+    engines: {node: '>=22'}
 
   typescript@5.6.3:
     resolution: {integrity: sha512-hjcS1mhfuyi4WW8IWtjP7brDrG2cuDZukyrYrSauoXGNgx0S7zceP07adYkJycEr56BOUTNPzbInooiN3fn1qw==}
@@ -1324,6 +1383,31 @@ snapshots:
 
   '@antfu/utils@8.1.1': {}
 
+  '@augment-vir/assert@31.20.0':
+    dependencies:
+      '@augment-vir/core': 31.20.0
+      '@date-vir/duration': 7.3.1
+      deep-eql: 5.0.2
+      expect-type: 1.2.1
+      type-fest: 4.41.0
+
+  '@augment-vir/common@31.20.0':
+    dependencies:
+      '@augment-vir/assert': 31.20.0
+      '@augment-vir/core': 31.20.0
+      '@date-vir/duration': 7.3.1
+      ansi-styles: 6.2.1
+      json5: 2.2.3
+      type-fest: 4.41.0
+      typed-event-target: 4.1.0
+
+  '@augment-vir/core@31.20.0':
+    dependencies:
+      '@date-vir/duration': 7.3.1
+      browser-or-node: 3.0.0
+      json5: 2.2.3
+      type-fest: 4.41.0
+
   '@babel/code-frame@7.26.2':
     dependencies:
       '@babel/helper-validator-identifier': 7.25.9
@@ -1432,6 +1516,12 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
+
+  '@date-vir/duration@7.3.1':
+    dependencies:
+      '@types/luxon': 3.6.2
+      luxon: 3.6.1
+      type-fest: 4.41.0
 
   '@esbuild/aix-ppc64@0.25.4':
     optional: true
@@ -1837,7 +1927,11 @@ snapshots:
 
   '@types/estree@1.0.7': {}
 
+  '@types/luxon@3.6.2': {}
+
   acorn@8.14.1: {}
+
+  ansi-styles@6.2.1: {}
 
   argparse@2.0.1: {}
 
@@ -1865,6 +1959,8 @@ snapshots:
     dependencies:
       '@babel/core': 7.26.0
       babel-plugin-jsx-dom-expressions: 0.39.3(@babel/core@7.26.0)
+
+  browser-or-node@3.0.0: {}
 
   browserslist@4.24.2:
     dependencies:
@@ -1907,6 +2003,8 @@ snapshots:
   debug@4.4.1:
     dependencies:
       ms: 2.1.3
+
+  deep-eql@5.0.2: {}
 
   detect-libc@2.0.4: {}
 
@@ -1958,6 +2056,8 @@ snapshots:
 
   escalade@3.2.0: {}
 
+  expect-type@1.2.1: {}
+
   exsolve@1.0.5: {}
 
   fdir@6.4.4(picomatch@4.0.2):
@@ -1985,6 +2085,12 @@ snapshots:
     dependencies:
       parent-module: 1.0.1
       resolve-from: 4.0.0
+
+  input-device-handler@9.0.1:
+    dependencies:
+      '@augment-vir/assert': 31.20.0
+      '@augment-vir/common': 31.20.0
+      typed-event-target: 4.1.0
 
   is-arrayish@0.2.1: {}
 
@@ -2066,6 +2172,8 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
+
+  luxon@3.6.1: {}
 
   magic-string@0.30.17:
     dependencies:
@@ -2231,6 +2339,11 @@ snapshots:
       mkdirp: 3.0.1
       yallist: 5.0.0
 
+  tauri-plugin-gamepad-api@0.0.5:
+    dependencies:
+      '@tauri-apps/api': 2.1.1
+      tslib: 2.8.1
+
   tinyexec@1.0.1: {}
 
   tinyglobby@0.2.13:
@@ -2239,6 +2352,14 @@ snapshots:
       picomatch: 4.0.2
 
   tslib@2.8.1: {}
+
+  type-fest@4.41.0: {}
+
+  typed-event-target@4.1.0:
+    dependencies:
+      '@augment-vir/assert': 31.20.0
+      '@augment-vir/common': 31.20.0
+      '@augment-vir/core': 31.20.0
 
   typescript@5.6.3: {}
 

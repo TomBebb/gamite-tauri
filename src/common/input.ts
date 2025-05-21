@@ -1,16 +1,95 @@
 import mitt, { Emitter } from "mitt"
 import { produce } from "immer"
 import { isBigScreen } from "./bigScreen"
-import { createEffect, createSignal } from "solid-js"
+import { createEffect, createSignal, onCleanup, onMount } from "solid-js"
 
 import * as logger from "@tauri-apps/plugin-log"
 
+const [gamepadCount, setGamepadCount] = createSignal(0)
+const [gamepad, setGamepad] = createSignal<Gamepad | null>()
+
 export const enum MappedButton {
-    Down = "down",
-    Up = "up",
-    Right = "right",
-    Left = "left",
-    Confirm = "confirm",
+    Down,
+    Up,
+    Right,
+    Left,
+    Confirm,
+    Back,
+    ShowMenu,
+}
+
+const buttonsMapping: Map<number, MappedButton> = new Map<number, MappedButton>(
+    [
+        [12, MappedButton.Up],
+        [13, MappedButton.Down],
+        [14, MappedButton.Left],
+        [15, MappedButton.Right],
+        [0, MappedButton.Confirm],
+        [1, MappedButton.Back],
+        [16, MappedButton.ShowMenu],
+    ]
+)
+
+const [count, setCount] = createSignal(0)
+
+function scanGamepads(): void {
+    const gps = navigator.getGamepads()
+    let curr: Gamepad | null = null
+    for (const gp of gps) {
+        if (gp !== null) {
+            curr = gp
+            break
+        }
+    }
+
+    setCount(count() + 1)
+    if (count() >= 100) {
+        console.log("gps", curr, gamepad())
+        setCount(0)
+    }
+
+    if (curr?.buttons && gamepad()?.buttons) {
+        for (const [index, btn] of buttonsMapping.entries()) {
+            if (!gamepad()!.buttons[index] && curr!.buttons[index]) {
+                inputEmitter.emit("pressed", btn)
+                logger.info(`Pressed gamepad: ${btn}`)
+            } else if (gamepad()!.buttons[index] && !curr!.buttons[index])
+                inputEmitter.emit("released", btn)
+        }
+    }
+    setGamepad(curr ? { ...curr } : null)
+}
+
+let gamepadScanner: number = -1
+createEffect(() => {
+    const hasInterval = gamepadScanner !== -1
+    if (!isBigScreen()) {
+        console.info("clear interval")
+        clearInterval(gamepadScanner)
+        gamepadScanner = -1
+    } else if (gamepadCount() > 0 && isBigScreen() && !hasInterval) {
+        console.info("set interval")
+
+        gamepadScanner = setInterval(scanGamepads, 10)
+    }
+})
+
+function onGamepadConnected(gamepad: GamepadEvent) {
+    setGamepadCount(gamepadCount() + 1)
+    logger
+        .info(
+            `gamepad connected ${gamepad.gamepad.id}; total: ${gamepadCount()}`
+        )
+        .catch(console.error)
+}
+
+function onGamepadDisconnected(gamepad: GamepadEvent) {
+    logger
+        .info(
+            `gamepad disconnected ${gamepad.gamepad.id}; total: ${gamepadCount()}`
+        )
+        .catch(console.error)
+    setGamepadCount(Math.max(0, gamepadCount() - 1))
 }
 
 export type InputEvents = {
@@ -62,6 +141,14 @@ function onKeyUp(event: KeyboardEvent) {
     if (mapped) inputEmitter.emit("released", mapped)
 }
 
+onMount(() => {
+    window.addEventListener("gamepadconnected", onGamepadConnected)
+    window.addEventListener("gamepaddisconnected", onGamepadDisconnected)
+})
+onCleanup(() => {
+    window.removeEventListener("gamepadconnected", onGamepadConnected)
+    window.removeEventListener("gamepaddisconnected", onGamepadDisconnected)
+})
 createEffect(() => {
     const bs = isBigScreen()
     logger.debug(`isBigScreen: ${bs}`).catch(console.error)

@@ -38,16 +38,12 @@ fn restore(app: &AppHandle) -> tauri::Result<()> {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let level: LevelFilter = if cfg!(debug_assertions) {
-        LevelFilter::Debug
+        LevelFilter::Info
     } else {
         LevelFilter::Info
     };
     let app = tauri::Builder::default()
-        .plugin(
-            tauri_plugin_log::Builder::new()
-                .level_for("gamite", level)
-                .build(),
-        )
+        .plugin(tauri_plugin_log::Builder::new().level(level).build())
         .plugin(tauri_plugin_cli::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())

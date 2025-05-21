@@ -5,7 +5,7 @@ import { render } from "solid-js/web"
 import { MemoryRouter } from "@solidjs/router"
 import App from "./App"
 import { window } from "@tauri-apps/api"
-
+import "tauri-plugin-gamepad-api"
 const w = window.getCurrentWindow()
 await w.setDecorations(false)
 const root = document.getElementById("app")!
