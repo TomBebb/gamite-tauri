@@ -1,12 +1,13 @@
 import { defineConfig } from "vite"
 import solidPlugin from "vite-plugin-solid"
 import tailwindcss from "@tailwindcss/vite"
+import vitePluginArraybuffer from "vite-plugin-arraybuffer"
 // @ts-expect-error process is a nodejs global
 const host = process.env.TAURI_DEV_HOST
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
-    plugins: [solidPlugin(), tailwindcss()],
+    plugins: [solidPlugin(), tailwindcss(), vitePluginArraybuffer()],
     build: {
         target: "esnext",
     },

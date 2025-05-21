@@ -20,6 +20,7 @@
     "fs:allow-appdata-meta-recursive",
     "fs:allow-appdata-read-recursive",
     "fs:allow-appdata-write-recursive",
-    "fs:default"
+    "fs:default",
+    "core:tray:allow-new"
   ]
 }
