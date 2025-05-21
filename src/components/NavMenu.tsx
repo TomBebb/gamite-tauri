@@ -6,7 +6,6 @@ import {
     FocusedItem,
     focusedItem,
     isBigScreen,
-    isDesktop,
     setFocusedItem,
 } from "../common/bigScreen"
 import "./NavMenu.css"
