@@ -1,12 +1,18 @@
 import { routes } from "../router"
-import { createEffect, For } from "solid-js"
+import { For } from "solid-js"
 import { A, useLocation } from "@solidjs/router"
+import { inputEmitter } from "../common/input"
+import { FocusedItem, focusedItem } from "../common/bigScreen"
 
 export default function (props: { class: string }) {
     const location = useLocation()
-    createEffect(() => {
-        console.log("location", location.pathname)
+
+    inputEmitter.on("pressed", (ev) => {
+        console.info("focusedItem", focusedItem)
+        if (focusedItem() !== FocusedItem.NavMenu) return
+        console.log("Pressed " + ev)
     })
+
     return (
         <ul class={"menu menu-md rounded-box bg-base-200 " + props.class}>
             <For each={routes()}>

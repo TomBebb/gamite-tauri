@@ -4,6 +4,11 @@ import { getMatches } from "@tauri-apps/plugin-cli"
 
 export const [isBigScreen, setBigScreen] = createSignal<boolean>(false)
 
+export enum FocusedItem {
+    Page,
+    NavMenu,
+}
+
 enum Mode {
     BigScreen = "bigscreen",
     Desktop = "desktop",
@@ -17,6 +22,10 @@ getMatches()
     })
     .catch(console.error)
 export const isDesktop = createMemo(() => !isBigScreen(), false)
+
+export const [focusedItem, setFocusedItem] = createSignal<FocusedItem>(
+    FocusedItem.Page
+)
 createEffect(() => {
     getCurrentWindow().setFullscreen(isBigScreen()).catch(console.error)
 })

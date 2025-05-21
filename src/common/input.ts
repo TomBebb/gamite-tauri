@@ -1,6 +1,11 @@
 import mitt, { Emitter } from "mitt"
 import { produce } from "immer"
-import { isBigScreen } from "./bigScreen"
+import {
+    focusedItem,
+    FocusedItem,
+    isBigScreen,
+    setFocusedItem,
+} from "./bigScreen"
 import { createEffect, createSignal } from "solid-js"
 
 export const enum MappedButton {
@@ -21,9 +26,16 @@ export const [currButtons, setCurrButtons] = createSignal<Set<MappedButton>>(
     new Set()
 )
 
-inputEmitter.on("pressed", (btn) =>
+inputEmitter.on("pressed", (btn) => {
+    if (btn === MappedButton.ShowNav) {
+        setFocusedItem(
+            focusedItem() == FocusedItem.NavMenu
+                ? FocusedItem.Page
+                : FocusedItem.NavMenu
+        )
+    }
     setCurrButtons(produce(currButtons(), (st) => st.add(btn)))
-)
+})
 inputEmitter.on("released", (btn) =>
     setCurrButtons(
         produce(currButtons(), (st) => {
