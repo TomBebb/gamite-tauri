@@ -1,7 +1,21 @@
 import { getCurrentWindow } from "@tauri-apps/api/window"
 import { createEffect, createMemo, createSignal } from "solid-js"
+import { getMatches } from "@tauri-apps/plugin-cli"
 
 export const [isBigScreen, setBigScreen] = createSignal<boolean>(false)
+
+enum Mode {
+    BigScreen = "bigscreen",
+    Desktop = "desktop",
+}
+
+getMatches()
+    .then((result) => {
+        const rawMode = result.subcommand?.name as Mode | undefined
+        const mode = rawMode ?? Mode.Desktop
+        setBigScreen(mode == Mode.BigScreen)
+    })
+    .catch(console.error)
 export const isDesktop = createMemo(() => !isBigScreen(), false)
 createEffect(() => {
     getCurrentWindow().setFullscreen(isBigScreen()).catch(console.error)

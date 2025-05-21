@@ -1,28 +1,27 @@
 {
-  "$schema": "../gen/schemas/desktop-schema.json",
-  "identifier": "default",
-  "description": "Capability for the main window",
-  "windows": [
-    "main"
-  ],
-  "permissions": [
-    "core:default",
-    "shell:allow-open",
-    "core:window:allow-is-fullscreen",
-    "core:window:allow-set-fullscreen",
-    "core:window:allow-set-decorations",
-    "core:window:allow-close",
-    "core:window:allow-minimize",
-    "core:window:allow-unminimize",
-    "core:window:allow-hide",
-    "core:window:allow-maximize",
-    "core:window:allow-start-dragging",
-    "core:window:allow-toggle-maximize",
-    "fs:read-all",
-    "fs:allow-appdata-meta-recursive",
-    "fs:allow-appdata-read-recursive",
-    "fs:allow-appdata-write-recursive",
-    "fs:default",
-    "core:tray:allow-new"
-  ]
+    "$schema": "../gen/schemas/desktop-schema.json",
+    "identifier": "default",
+    "description": "Capability for the main window",
+    "windows": ["main"],
+    "permissions": [
+        "core:default",
+        "shell:allow-open",
+        "core:window:allow-is-fullscreen",
+        "core:window:allow-set-fullscreen",
+        "core:window:allow-set-decorations",
+        "core:window:allow-close",
+        "core:window:allow-minimize",
+        "core:window:allow-unminimize",
+        "core:window:allow-hide",
+        "core:window:allow-maximize",
+        "core:window:allow-start-dragging",
+        "core:window:allow-toggle-maximize",
+        "fs:read-all",
+        "fs:allow-appdata-meta-recursive",
+        "fs:allow-appdata-read-recursive",
+        "fs:allow-appdata-write-recursive",
+        "fs:default",
+        "core:tray:allow-new",
+        "cli:default"
+    ]
 }
