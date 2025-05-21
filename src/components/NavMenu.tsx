@@ -1,27 +1,58 @@
 import { routes } from "../router"
-import { For } from "solid-js"
-import { A, useLocation } from "@solidjs/router"
-import { inputEmitter } from "../common/input"
-import { FocusedItem, focusedItem } from "../common/bigScreen"
+import { createEffect, createSignal, For } from "solid-js"
+import { A, useLocation, useNavigate } from "@solidjs/router"
+import { inputEmitter, MappedButton } from "../common/input"
+import {
+    FocusedItem,
+    focusedItem,
+    isBigScreen,
+    setFocusedItem,
+} from "../common/bigScreen"
 
 export default function (props: { class: string }) {
     const location = useLocation()
+    const navigate = useNavigate()
+    const [bigScreenIndex, setBigScreenIndex] = createSignal<number>(0)
+
+    createEffect(() => {
+        console.info(isBigScreen())
+        setBigScreenIndex(0)
+    })
 
     inputEmitter.on("pressed", (ev) => {
         console.info("focusedItem", focusedItem)
         if (focusedItem() !== FocusedItem.NavMenu) return
         console.log("Pressed " + ev)
+        switch (ev) {
+            case MappedButton.Up:
+                if (bigScreenIndex() !== 0) {
+                    setBigScreenIndex(bigScreenIndex() - 1)
+                }
+                break
+            case MappedButton.Down:
+                if (bigScreenIndex() !== routes().length - 1) {
+                    setBigScreenIndex(bigScreenIndex() + 1)
+                }
+                break
+            case MappedButton.Confirm:
+                navigate(routes()[bigScreenIndex()].path)
+                setFocusedItem(FocusedItem.Page)
+                break
+        }
     })
 
     return (
         <ul class={"menu menu-md rounded-box bg-base-200 " + props.class}>
             <For each={routes()}>
-                {(route) => (
+                {(route, index) => (
                     <li>
                         <A
                             href={route.path}
                             classList={{
                                 "menu-active": route.path === location.pathname,
+                                "menu-focus":
+                                    isBigScreen() &&
+                                    bigScreenIndex() === index(),
                             }}
                         >
                             <div class="flex flex-row items-center justify-start gap-2">

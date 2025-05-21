@@ -54,7 +54,7 @@ function mapKey(event: KeyboardEvent): null | MappedButton {
             return MappedButton.Left
         case "ArrowRight":
             return MappedButton.Right
-        case "Space":
+        case "Enter":
             return MappedButton.Confirm
         case "Escape":
             return MappedButton.ShowNav
