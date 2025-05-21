@@ -15,6 +15,7 @@ export const enum MappedButton {
     Up = "up",
     Right = "right",
     Left = "left",
+    Back = "back",
     Confirm = "confirm",
     ShowNav = "showNav",
 }
@@ -34,6 +35,8 @@ const keyMappings = new Map<string, MappedButton>([
     ["ArrowLeft", MappedButton.Left],
     ["ArrowRight", MappedButton.Right],
     ["Enter", MappedButton.Confirm],
+    ["Backspace", MappedButton.Back],
+    ["Escape", MappedButton.ShowNav],
 ])
 inputEmitter.on("pressed", (btn) => {
     if (btn === MappedButton.ShowNav) {
@@ -64,6 +67,7 @@ function onKeyUp(event: KeyboardEvent) {
     logger.debug(`keyUp ${event.key} => ${mapped}`).catch(console.error)
     if (mapped) inputEmitter.emit("released", mapped)
 }
+
 const gamepads: Gamepad[] = []
 window.addEventListener("gamepadconnected", (event: GamepadEvent) => {
     console.info("gamepadconnected", event)
@@ -74,10 +78,12 @@ window.addEventListener("gamepaddisconnected", (event: GamepadEvent) => {
     console.info("gamepaddisconnected", event)
     gamepads.splice(gamepads.indexOf(event.gamepad), 1)
 })
+
 interface IndexedMappedButton {
     index: number
     mapped: MappedButton
 }
+
 const gpButtonIndices: IndexedMappedButton[] = [
     {
         index: 0,
@@ -101,6 +107,7 @@ const gpButtonIndices: IndexedMappedButton[] = [
     },
 ]
 const deadzone = 0.1
+
 function setGamepadInterval(): number {
     console.debug("setGamepadInterval", { gamepadInterval })
     return setInterval(() => {
@@ -131,6 +138,7 @@ function setGamepadInterval(): number {
         }
     }, 1000 / 100)
 }
+
 let gamepadInterval: number
 
 createEffect(() => {
