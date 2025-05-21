@@ -3,8 +3,8 @@ import { createMemo, createSignal, Show } from "solid-js"
 import { settings } from "../common/settings"
 import IconClose from "~icons/mdi/close"
 import IconMinimize from "~icons/mdi/minimize"
-import IconMaximize from "~icons/mdi/minimize"
-import IconRestore from "~icons/mdi/restore"
+import IconMaximize from "~icons/mdi/maximize"
+import IconRestore from "~icons/mdi/window-restore"
 
 export default function (props: { class: string }) {
     const general = createMemo(() => settings().general)
