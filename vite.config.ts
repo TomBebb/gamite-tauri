@@ -7,7 +7,15 @@ import Icons from "unplugin-icons/vite"
 const host = process.env.TAURI_DEV_HOST
 
 export default defineConfig(async () => ({
-    plugins: [solidPlugin(), tailwindcss(), vitePluginArraybuffer(), Icons()],
+    plugins: [
+        solidPlugin(),
+        tailwindcss(),
+        vitePluginArraybuffer(),
+        Icons({
+            compiler: "jsx",
+            jsx: "preact",
+        }),
+    ],
     build: {
         target: "esnext",
     },
