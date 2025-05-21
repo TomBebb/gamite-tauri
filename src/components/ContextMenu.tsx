@@ -1,7 +1,6 @@
 import { GameData, GameInstallStatus } from "../common/models"
 import { createMemo, For, onCleanup, onMount } from "solid-js"
 import { getActionData, getGameActions } from "../common/gameActions"
-import { Icon } from "@iconify-icon/solid"
 
 export interface ContextMenuProps {
     game?: GameData
@@ -36,7 +35,7 @@ export default function ContextMenu(props: ContextMenuProps) {
     return (
         <div
             ref={ref!}
-            class="menu absolute z-10 w-60 rounded-box bg-base-200 transition-opacity"
+            class="menu rounded-box bg-base-200 absolute z-10 w-60 transition-opacity"
             classList={{ "opacity-0": props.game === undefined }}
             style={{ top: props.pos.y + "px", left: props.pos.x + "px" }}
         >
@@ -45,7 +44,7 @@ export default function ContextMenu(props: ContextMenuProps) {
                     <li
                         class={`bg-${item.color} text-${item.color}-content flex flex-row items-center gap-5 rounded`}
                     >
-                        <Icon icon={item.icon} />
+                        {item.icon}
                         {item.name}
                     </li>
                 )}

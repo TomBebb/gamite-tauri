@@ -1,5 +1,6 @@
 import { GameInstallStatus } from "./models"
 import { SemanticColor } from "./colors"
+import { JSXElement } from "solid-js"
 
 export type GameAction = "play" | "install" | "uninstall" | "edit" | "delete"
 const commonActions: GameAction[] = ["edit", "delete"]
@@ -17,7 +18,7 @@ export function getGameActions(status: GameInstallStatus): GameAction[] {
 
 export type GameActionData = {
     name: string
-    icon: string
+    icon: JSXElement
     color: SemanticColor
 }
 const actionsData: Record<GameAction, GameActionData> = {

@@ -1,7 +1,10 @@
 import { JSXElement } from "solid-js"
-import { Icon } from "@iconify-icon/solid"
 import { settings, setSettings } from "../common/settings"
 import { PostGameLaunchAction, Settings } from "../common/models"
+import IconEye from "~icons/mdi/eye"
+import IconDatabase from "~icons/mdi/database"
+import IconTrophy from "~icons/mdi/trophy"
+import IconWrench from "~icons/mdi/wrench"
 
 function Form({ children }: { children: JSXElement }) {
     return (
@@ -81,7 +84,7 @@ export default function () {
                     checked={true}
                     aria-label="General"
                 />
-                <Icon icon="mdi:wrench" />
+                <IconWrench />
                 General
             </label>
             <div class="tab-content border-base-300 bg-base-100 p-6">
@@ -133,7 +136,7 @@ export default function () {
 
             <label class="tab">
                 <input type="radio" name="tabs" aria-label="Appearance" />
-                <Icon icon="mdi:eye" />
+                <IconEye />
                 Appearance
             </label>
             <div class="tab-content border-base-300 bg-base-100 p-6">
@@ -142,7 +145,7 @@ export default function () {
 
             <label class="tab">
                 <input type="radio" name="tabs" aria-label="Metadata" />
-                <Icon icon="mdi:database" />
+                <IconDatabase />
                 Metadata
             </label>
             <div class="tab-content border-base-300 bg-base-100 p-6">
@@ -156,7 +159,7 @@ export default function () {
             </div>
             <label class="tab">
                 <input type="radio" name="tabs" aria-label="Achievements" />
-                <Icon icon="mdi:trophy" />
+                <IconTrophy />
                 Achievements
             </label>
             <div class="tab-content border-base-300 bg-base-100 p-6">

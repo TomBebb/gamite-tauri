@@ -1,7 +1,10 @@
 import { window } from "@tauri-apps/api"
-import { Icon } from "@iconify-icon/solid"
-import { createMemo, createSignal } from "solid-js"
+import { createMemo, createSignal, Show } from "solid-js"
 import { settings } from "../common/settings"
+import IconClose from "~icons/mdi/close"
+import IconMinimize from "~icons/mdi/minimize"
+import IconMaximize from "~icons/mdi/minimize"
+import IconRestore from "~icons/mdi/restore"
 
 export default function (props: { class: string }) {
     const general = createMemo(() => settings().general)
@@ -44,23 +47,21 @@ export default function (props: { class: string }) {
                 }}
             />
             <button class="btn btn-accent btn-sm" on:click={toggleMaximize}>
-                <Icon
-                    icon={
-                        "mdi:window-" + (maximized() ? "restore" : "maximize")
-                    }
-                />
+                <Show when={!maximized()} fallback={<IconRestore />}>
+                    <IconMaximize />
+                </Show>
             </button>
             <button
                 class="btn btn-warning btn-sm"
                 on:click={() => minimize().catch(console.error)}
             >
-                <Icon icon="mdi:window-minimize" />
+                <IconMinimize />
             </button>
             <button
                 class="btn btn-error btn-sm"
                 on:click={() => main.close().catch(console.error)}
             >
-                <Icon icon="mdi:window-close" />
+                <IconClose />
             </button>
         </div>
     )

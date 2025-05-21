@@ -1,6 +1,5 @@
 import { routes } from "../router"
 import { createEffect, For } from "solid-js"
-import { Icon } from "@iconify-icon/solid"
 import { A, useLocation } from "@solidjs/router"
 
 export default function (props: { class: string }) {
@@ -20,7 +19,7 @@ export default function (props: { class: string }) {
                             }}
                         >
                             <div class="flex flex-row items-center justify-start gap-2">
-                                <Icon icon={route.icon} />
+                                {route.icon}
                                 {route.name}
                             </div>
                         </A>
