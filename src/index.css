@@ -1,14 +1,10 @@
 @import "tailwindcss";
+
 @plugin "daisyui";
-.show-on-big-screen {
+body.big-screen .show-on-desktop {
     display: none;
 }
-body.big-screen .show-on-big-screen {
-    display: unset;
-}
-.show-on-desktop {
+
+body:not(.big-screen) .show-on-big-screen {
     display: none;
-}
-body:not(.big-screen) .show-on-desktop {
-    display: unset;
 }
