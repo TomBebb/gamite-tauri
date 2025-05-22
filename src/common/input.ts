@@ -1,12 +1,11 @@
 import mitt, { Emitter } from "mitt"
 import { produce } from "immer"
 import { isBigScreen } from "./bigScreen"
-import { createEffect, createSignal, onCleanup, onMount } from "solid-js"
-
+import { createEffect, createSignal } from "solid-js"
 import * as logger from "@tauri-apps/plugin-log"
+import { execute, PluginEvent } from "tauri-plugin-gamepad-api"
 
-const [gamepadCount, setGamepadCount] = createSignal(0)
-const [gamepad, setGamepad] = createSignal<Gamepad | null>()
+const [gamepad, setGamepad] = createSignal<PluginEvent | null>()
 
 export const enum MappedButton {
     Down,
@@ -30,25 +29,15 @@ const buttonsMapping: Map<number, MappedButton> = new Map<number, MappedButton>(
     ]
 )
 
-const [count, setCount] = createSignal(0)
-
-function scanGamepads(): void {
-    const gps = navigator.getGamepads()
-    let curr: Gamepad | null = null
-    for (const gp of gps) {
-        if (gp !== null) {
-            curr = gp
-            break
-        }
-    }
-
-    setCount(count() + 1)
-    if (count() >= 100) {
-        console.log("gps", curr, gamepad())
-        setCount(0)
-    }
-
+function onGamepadEvent(curr: PluginEvent) {
+    console.log("onGamepadEvent", curr)
     if (curr?.buttons && gamepad()?.buttons) {
+        for (let i = 0; i < curr.buttons.length; i++) {
+            console.info(curr.buttons[i])
+            if (curr.buttons[i]) {
+                console.info(`pressed button${curr.buttons[i]} on${curr.name}`)
+            }
+        }
         for (const [index, btn] of buttonsMapping.entries()) {
             if (!gamepad()!.buttons[index] && curr!.buttons[index]) {
                 inputEmitter.emit("pressed", btn)
@@ -57,39 +46,7 @@ function scanGamepads(): void {
                 inputEmitter.emit("released", btn)
         }
     }
-    setGamepad(curr ? { ...curr } : null)
-}
-
-let gamepadScanner: number = -1
-createEffect(() => {
-    const hasInterval = gamepadScanner !== -1
-    if (!isBigScreen()) {
-        console.info("clear interval")
-        clearInterval(gamepadScanner)
-        gamepadScanner = -1
-    } else if (gamepadCount() > 0 && isBigScreen() && !hasInterval) {
-        console.info("set interval")
-
-        gamepadScanner = setInterval(scanGamepads, 10)
-    }
-})
-
-function onGamepadConnected(gamepad: GamepadEvent) {
-    setGamepadCount(gamepadCount() + 1)
-    logger
-        .info(
-            `gamepad connected ${gamepad.gamepad.id}; total: ${gamepadCount()}`
-        )
-        .catch(console.error)
-}
-
-function onGamepadDisconnected(gamepad: GamepadEvent) {
-    logger
-        .info(
-            `gamepad disconnected ${gamepad.gamepad.id}; total: ${gamepadCount()}`
-        )
-        .catch(console.error)
-    setGamepadCount(Math.max(0, gamepadCount() - 1))
+    setGamepad(curr)
 }
 
 export type InputEvents = {
@@ -120,6 +77,7 @@ inputEmitter.on("released", (btn) =>
         })
     )
 )
+window.ongamepadconnected = (ev) => console.log("ongamepadconnected", ev)
 
 function onKeyDown(event: KeyboardEvent) {
     const mapped = keyMappings.get(event.key)
@@ -133,22 +91,28 @@ function onKeyUp(event: KeyboardEvent) {
     if (mapped) inputEmitter.emit("released", mapped)
 }
 
-onMount(() => {
-    window.addEventListener("gamepadconnected", onGamepadConnected)
-    window.addEventListener("gamepaddisconnected", onGamepadDisconnected)
-})
-onCleanup(() => {
-    window.removeEventListener("gamepadconnected", onGamepadConnected)
-    window.removeEventListener("gamepaddisconnected", onGamepadDisconnected)
-})
+const [gamepadEventListener, setGamepadEventListener] = createSignal<
+    (() => void) | null
+>(null)
+
+execute(onGamepadEvent).catch(console.error)
 createEffect(() => {
     const bs = isBigScreen()
     logger.debug(`isBigScreen: ${bs}`).catch(console.error)
     if (bs) {
         window.addEventListener("keydown", onKeyDown)
         window.addEventListener("keyup", onKeyUp)
+        execute(onGamepadEvent)
+            .catch(console.error)
+            .then(setGamepadEventListener)
     } else {
         window.removeEventListener("keydown", onKeyDown)
         window.removeEventListener("keyup", onKeyUp)
+        const val = gamepadEventListener()
+        console.log("evet listener", val)
+        if (val !== null) {
+            val()
+            setGamepadEventListener(null)
+        }
     }
 })
