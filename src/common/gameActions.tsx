@@ -1,6 +1,11 @@
 import { GameInstallStatus } from "./models"
 import { SemanticColor } from "./colors"
 import { JSXElement } from "solid-js"
+import IconPlay from "~icons/mdi/play"
+import IconEdit from "~icons/mdi/edit"
+import IconPlus from "~icons/mdi/plus"
+import IconMinus from "~icons/mdi/minus"
+import IconClear from "~icons/mdi/clear"
 
 export type GameAction = "play" | "install" | "uninstall" | "edit" | "delete"
 const commonActions: GameAction[] = ["edit", "delete"]
@@ -22,11 +27,11 @@ export type GameActionData = {
     color: SemanticColor
 }
 const actionsData: Record<GameAction, GameActionData> = {
-    play: { name: "Play", icon: "mdi:play", color: "success" },
-    edit: { name: "Edit", icon: "mdi:edit", color: "primary" },
-    install: { name: "Install", icon: "mdi:plus", color: "accent" },
-    uninstall: { name: "Uninstall", icon: "mdi:minus", color: "warning" },
-    delete: { name: "Delete", icon: "mdi:clear-bold", color: "error" },
+    play: { name: "Play", icon: <IconPlay />, color: "success" },
+    edit: { name: "Edit", icon: <IconEdit />, color: "primary" },
+    install: { name: "Install", icon: <IconPlus />, color: "accent" },
+    uninstall: { name: "Uninstall", icon: <IconMinus />, color: "warning" },
+    delete: { name: "Delete", icon: <IconClear />, color: "error" },
 }
 
 export function getActionData(action: GameAction): GameActionData {
