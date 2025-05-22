@@ -1,5 +1,12 @@
 import { GameData, GameInstallStatus } from "../common/models"
-import { createMemo, For, onCleanup, onMount } from "solid-js"
+import {
+    createEffect,
+    createMemo,
+    createSignal,
+    For,
+    onCleanup,
+    onMount,
+} from "solid-js"
 import {
     GameAction,
     getActionData,
@@ -15,6 +22,19 @@ export interface ContextMenuProps {
 }
 
 export default function ContextMenu(props: ContextMenuProps) {
+    const [show, setShow] = createSignal(true)
+
+    createEffect(() => {
+        if (props.game) {
+            setShow(true)
+        }
+    })
+
+    function hide(): void {
+        setShow(false)
+        setTimeout(() => props.clearGame(), 500)
+    }
+
     let ref: HTMLDivElement
 
     const actions = createMemo(() =>
@@ -24,7 +44,7 @@ export default function ContextMenu(props: ContextMenuProps) {
     function globalClick(event: MouseEvent) {
         if (!ref.contains(event.target as Node) && props.game) {
             logger.info("click outside").catch(console.error)
-            props.clearGame()
+            hide()
         }
     }
 
@@ -38,14 +58,14 @@ export default function ContextMenu(props: ContextMenuProps) {
 
     function onClick(action: GameAction) {
         logger.info(`game action ${action}`).catch(console.error)
-        props.clearGame()
+        hide()
     }
 
     return (
         <div
             ref={ref!}
             class="menu rounded-box bg-base-200 absolute z-10 w-60 transition-opacity"
-            classList={{ "opacity-0": props.game === undefined }}
+            classList={{ "opacity-0": props.game === undefined || !show() }}
             style={{ top: props.pos.y + "px", left: props.pos.x + "px" }}
         >
             <For each={actions()}>
