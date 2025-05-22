@@ -1,7 +1,7 @@
 import mitt, { Emitter } from "mitt"
 import { produce } from "immer"
 import { isBigScreen } from "./bigScreen"
-import { createEffect, createSignal } from "solid-js"
+import { createEffect, createSignal, onCleanup, onMount } from "solid-js"
 
 import * as logger from "@tauri-apps/plugin-log"
 
@@ -15,7 +15,7 @@ export const enum MappedButton {
     Left,
     Confirm,
     Back,
-    ShowMenu,
+    ToggleMenu,
 }
 
 const buttonsMapping: Map<number, MappedButton> = new Map<number, MappedButton>(
@@ -26,7 +26,7 @@ const buttonsMapping: Map<number, MappedButton> = new Map<number, MappedButton>(
         [15, MappedButton.Right],
         [0, MappedButton.Confirm],
         [1, MappedButton.Back],
-        [16, MappedButton.ShowMenu],
+        [16, MappedButton.ToggleMenu],
     ]
 )
 
