@@ -6,11 +6,13 @@ import { createEffect, createSignal } from "solid-js"
 import * as logger from "@tauri-apps/plugin-log"
 
 export const enum MappedButton {
-    Down = "down",
-    Up = "up",
-    Right = "right",
-    Left = "left",
-    Confirm = "confirm",
+    Down,
+    Up,
+    Right,
+    Left,
+    Confirm,
+    Back,
+    ToggleMenu,
 }
 
 export type InputEvents = {
@@ -28,6 +30,8 @@ const keyMappings = new Map<string, MappedButton>([
     ["ArrowLeft", MappedButton.Left],
     ["ArrowRight", MappedButton.Right],
     ["Enter", MappedButton.Confirm],
+    ["Backspace", MappedButton.Back],
+    ["Escape", MappedButton.ToggleMenu],
 ])
 inputEmitter.on("pressed", (btn) =>
     setCurrButtons(produce(currButtons(), (st) => st.add(btn)))
