@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 @plugin "daisyui";
+
+@source inline('{bg,text}-{success,error,primary,accent,warning}{,-content}');
 body.big-screen .show-on-desktop {
     display: none;
 }

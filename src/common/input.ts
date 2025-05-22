@@ -1,7 +1,7 @@
 import mitt, { Emitter } from "mitt"
 import { produce } from "immer"
 import { isBigScreen } from "./bigScreen"
-import { createEffect, createSignal, onCleanup, onMount } from "solid-js"
+import { createEffect, createSignal } from "solid-js"
 
 import * as logger from "@tauri-apps/plugin-log"
 
@@ -101,6 +101,15 @@ export const [currButtons, setCurrButtons] = createSignal<Set<MappedButton>>(
     new Set()
 )
 
+const keyMappings = new Map<string, MappedButton>([
+    ["ArrowDown", MappedButton.Down],
+    ["ArrowUp", MappedButton.Up],
+    ["ArrowLeft", MappedButton.Left],
+    ["ArrowRight", MappedButton.Right],
+    ["Enter", MappedButton.Confirm],
+    ["Backspace", MappedButton.Back],
+    ["Escape", MappedButton.ToggleMenu],
+])
 inputEmitter.on("pressed", (btn) =>
     setCurrButtons(produce(currButtons(), (st) => st.add(btn)))
 )
@@ -112,31 +121,14 @@ inputEmitter.on("released", (btn) =>
     )
 )
 
-function mapKey(event: KeyboardEvent): null | MappedButton {
-    switch (event.key) {
-        case "ArrowDown":
-            return MappedButton.Down
-        case "ArrowUp":
-            return MappedButton.Up
-        case "ArrowLeft":
-            return MappedButton.Left
-        case "ArrowRight":
-            return MappedButton.Right
-        case "space":
-            return MappedButton.Confirm
-        default:
-            return null
-    }
-}
-
 function onKeyDown(event: KeyboardEvent) {
-    const mapped = mapKey(event)
+    const mapped = keyMappings.get(event.key)
     logger.debug(`keyDown ${event.key} => ${mapped}`).catch(console.error)
     if (mapped) inputEmitter.emit("pressed", mapped)
 }
 
 function onKeyUp(event: KeyboardEvent) {
-    const mapped = mapKey(event)
+    const mapped = keyMappings.get(event.key)
     logger.debug(`keyUp ${event.key} => ${mapped}`).catch(console.error)
     if (mapped) inputEmitter.emit("released", mapped)
 }
