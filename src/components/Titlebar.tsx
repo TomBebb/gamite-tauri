@@ -35,7 +35,7 @@ export default function (props: { class: string }) {
 
     return (
         <div
-            class={"flex flex-row gap-2" + props.class}
+            class={`bg-primary flex flex-row gap-2 ${props.class}`}
             onDblClick={toggleMaximize}
         >
             <div
