@@ -5,6 +5,8 @@ import { render } from "solid-js/web"
 import { MemoryRouter } from "@solidjs/router"
 import App from "./App"
 import { window } from "@tauri-apps/api"
+import { invoke } from "@tauri-apps/api/core"
+import { onCleanup, onMount } from "solid-js"
 
 const w = window.getCurrentWindow()
 await w.setDecorations(false)
@@ -16,6 +18,20 @@ if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
     )
 }
 
+onMount(() =>
+    invoke("listen_gamepad")
+        .then(() => {
+            console.log("listening gamepad")
+        })
+        .catch((e) => console.error(e))
+)
+onCleanup(() =>
+    invoke("cancel_gamepad_listen")
+        .then(() => {
+            console.log("cancel listening gamepad")
+        })
+        .catch((e) => console.error(e))
+)
 enableMapSet()
 
 render(

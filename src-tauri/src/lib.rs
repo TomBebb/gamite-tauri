@@ -1,3 +1,4 @@
+#![feature(let_chains)]
 // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
 #[tauri::command]
 fn greet(name: &str) -> String {
@@ -13,11 +14,45 @@ async fn get_games(db_state: tauri::State<'_, AppDbState>) -> Result<Vec<GameDat
 
     Ok(raw.into_iter().map(Into::into).collect())
 }
+const LISTEN_GAMEPAD: AtomicBool = AtomicBool::new(false);
+
+#[tauri::command(async)]
+async fn listen_gamepad(app: AppHandle) {
+    tokio::task::spawn_blocking(move || {
+        LISTEN_GAMEPAD.store(true, Ordering::Relaxed);
+        log::info!("Listening for gamepads");
+        let mut gilrs = gilrs::Gilrs::new().unwrap();
+        log::info!("Connected to gilrs");
+        log::info!(
+            "Gamepads: {:?}",
+            gilrs
+                .gamepads()
+                .into_iter()
+                .map(|(_, gp)| gp.name().to_owned())
+                .collect::<Vec<_>>()
+        );
+        while LISTEN_GAMEPAD.load(Ordering::Relaxed)
+            && let Some(gilrs::Event {
+                id, event, time, ..
+            }) = gilrs.next_event()
+        {
+            log::info!("Gilrs event: {:?}", event);
+        }
+    })
+    .await
+    .unwrap();
+}
+
+#[tauri::command]
+fn cancel_gamepad_listen() {
+    LISTEN_GAMEPAD.store(false, Ordering::Relaxed);
+}
 
 use crate::db::{game, AppDbState};
 use gamite_core::GameData;
 use log::LevelFilter;
 use sea_orm::EntityTrait;
+use std::sync::atomic::{AtomicBool, Ordering};
 use tauri::tray::{MouseButton, MouseButtonState, TrayIconEvent};
 use tauri::{
     menu::{Menu, MenuItem},
@@ -51,7 +86,12 @@ pub fn run() {
         .plugin(tauri_plugin_cli::init())
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_shell::init())
-        .invoke_handler(tauri::generate_handler![greet, get_games])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            get_games,
+            listen_gamepad,
+            cancel_gamepad_listen
+        ])
         .build(tauri::generate_context!())
         .expect("error while running tauri application");
 
