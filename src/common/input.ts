@@ -1,7 +1,7 @@
 import mitt, { Emitter } from "mitt"
 import { produce } from "immer"
 import { isBigScreen } from "./bigScreen"
-import { createEffect, createSignal } from "solid-js"
+import { createEffect, createSignal, onMount, onCleanup } from "solid-js"
 
 import * as logger from "@tauri-apps/plugin-log"
 
@@ -56,14 +56,37 @@ function onKeyUp(event: KeyboardEvent) {
     if (mapped) inputEmitter.emit("released", mapped)
 }
 
+const [gamepadCount, setGamepadCount] = createSignal(0)
+
+function onGamepadConnected(ev: GamepadEvent) {
+    logger.info(`gamepad connected ${ev.gamepad.id}`)
+    setGamepadCount(gamepadCount() + 1)
+}
+
+function onGamepadDisonnected(ev: GamepadEvent) {
+    logger.info(`gamepad diconnected ${ev.gamepad.id}`)
+    setGamepadCount(gamepadCount() - 1)
+}
+
 createEffect(() => {
     const bs = isBigScreen()
     logger.debug(`isBigScreen: ${bs}`).catch(console.error)
     if (bs) {
+        setGamepadCount(navigator.getGamepads?.length ?? 0)
+
         window.addEventListener("keydown", onKeyDown)
         window.addEventListener("keyup", onKeyUp)
     } else {
         window.removeEventListener("keydown", onKeyDown)
         window.removeEventListener("keyup", onKeyUp)
     }
+})
+
+onMount(() => {
+    window.addEventListener("gamepadconnected", onGamepadConnected)
+    window.addEventListener("gamepaddisconnected", onGamepadDisonnected)
+})
+onCleanup(() => {
+    window.removeEventListener("gamepadconnected", onGamepadConnected)
+    window.removeEventListener("gamepaddisconnected", onGamepadDisonnected)
 })
