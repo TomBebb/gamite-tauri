@@ -39,7 +39,7 @@ const settingsRoute: MyRoute = {
 
 export const routes = createMemo<MyRoute[]>(() => {
     const val = settings()
-    return val.achievements.display
+    return val?.achievements?.display
         ? [library, achievements, addons, settingsRoute]
         : [library, addons, settingsRoute]
 })
