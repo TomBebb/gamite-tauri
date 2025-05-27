@@ -82,6 +82,16 @@ createEffect(() => {
     }
 })
 
+const [timer, setTimer] = createSignal(-1)
+
+function scanGamepads() {}
+
+createEffect(() => {
+    if (gamepadCount() === 0) return
+    if (timer() !== -1) clearInterval(timer()!)
+
+    setTimer(setInterval(scanGamepads, 10))
+})
 onMount(() => {
     window.addEventListener("gamepadconnected", onGamepadConnected)
     window.addEventListener("gamepaddisconnected", onGamepadDisonnected)
