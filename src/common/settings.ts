@@ -66,6 +66,8 @@ async function writeSettings(settings: Settings): Promise<void> {
 }
 
 loadSettings()
-    .then(setSettings)
+    .then((v) => {
+        if (v !== null) setSettings(v)
+    })
     .catch(console.error)
     .finally(() => (initialLoad = false))
