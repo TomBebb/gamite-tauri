@@ -1,13 +1,15 @@
 import { routes } from "./router"
 import { enableMapSet } from "immer"
-import "./common/bigScreen.ts"
 import { render } from "solid-js/web"
 import { MemoryRouter } from "@solidjs/router"
 import App from "./App"
 import { window } from "@tauri-apps/api"
+import { onMount } from "solid-js"
 
-const w = window.getCurrentWindow()
-await w.setDecorations(false)
+onMount(() => {
+    const w = window.getCurrentWindow()
+    w.setDecorations(false).catch(console.error)
+})
 const root = document.getElementById("app")!
 
 if (import.meta.env.DEV && !(root instanceof HTMLElement)) {
